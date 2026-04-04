@@ -1,0 +1,179 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head></head>
+        <meta charset="UTF-8">
+        <meta name="viewport" content="width=device-width, initial-scale=1.0">
+        <title>Architech Wealth Suite</title>
+        <link rel="stylesheet" href="style.css"/>
+    </head>
+    <body>
+    <%- include('partials/navbar') %>
+
+   <main class="dashboard-container">
+    <!-- Welcome Section -->
+    <div class="welcome-section">
+        <h2>Welcome back Claudine.</h2>
+        <p class="subtitle">Here's what's happening with your portfolio.</p>
+    </div>
+
+    <!-- Portfolio Summary -->
+    <section class="metrics-grid">
+
+        <div class="metric-card">
+            <div class="card-header">
+                <div class="icon-circle blue-light">♡</div>
+                <span class="badge blue-badge">GOOD</span>
+            </div>
+            <p class="metric-label">FINANCIAL HEALTH SCORE</p>
+            <div class="value-row">
+                <h3 class="metric-value">720</h3>
+                <span class="value-subtext">/1000</span>
+            </div>
+            <p class="trend text positive">↗ +12 points this month</p>
+        </div>
+
+        <div class="metric-card">
+                <div class="card-header">
+                    <div class="icon-circle gray-light">💳</div>
+                </div>
+                <p class="metric-label">TOTAL BALANCE</p>
+                <div class="value-row">
+                    <h3 class="metric-value">R 4,892,120.00</h3>
+                </div>
+                <p class="trend-text">&nbsp;</p> 
+            </div>
+
+            <div class="metric-card">
+                <div class="card-header">
+                    <div class="icon-circle gray-light">💵</div>
+                </div>
+                <p class="metric-label">MONTHLY INCOME</p>
+                <div class="value-row">
+                    <h3 class="metric-value">R 85,400.00</h3>
+                </div>
+                <p class="trend-text neutral">⏱ Next deposit in 4 days</p>
+            </div>
+
+            <div class="metric-card">
+                <div class="card-header">
+                    <div class="icon-circle blue-light">🛡️</div>
+                </div>
+                <p class="metric-label">SAFE TO SPEND</p>
+                <div class="value-row">
+                    <h3 class="metric-value">R 12,300.00</h3>
+                </div>
+                <p class="trend-text blue-text">Daily limit: R 450</p>
+            </div>
+    </section>
+
+    <!-- Recent Activity -->
+     <section class="middle-layout">
+        <div class="content-card">
+            <div class="card-header-flex">
+                <div>
+                    <h3 class="section-title">Monthly Spending Trend</h3>
+                    <p class="section-subtitle">Visualizing your capital flow over 30 days</p>
+                </div>
+                <div class="toggle-pill">
+                    <button class="pill-btn">WEEK</button>
+                    <button class="pill-btn active">MONTH</button>
+                </div>
+            </div>
+
+            <div class="bar-chart">
+                <div class="bar-group">
+                    <div class="bar light-blue" style="height: 40%;" data-value="R2,400"></div>
+                    <div class="bar dark-blue" style="height: 65%;" data-value="R3,900"></div>
+                    <span class="bar-label">WK 1</span>
+                </div>
+
+                <div class="bar-group">
+                        <div class="bar light-blue" style="height: 55%;" data-value="R3,300"></div>
+                        <div class="bar dark-blue" style="height: 45%;" data-value="R2,700"></div>
+                        <span class="bar-label">WK 2</span>
+                    </div>
+
+                    <div class="bar-group">
+                        <div class="bar light-blue" style="height: 70%;" data-value="R4,200"></div>
+                        <div class="bar dark-blue" style="height: 30%;" data-value="R1,800"></div>
+                        <span class="bar-label">WK 3</span>
+                    </div>
+
+                    <div class="bar-group">
+                        <div class="bar light-blue" style="height: 85%;" data-value="R5,100"></div>
+                        <div class="bar dark-blue" style="height: 100%;" data-value="R6,000"></div>
+                        <span class="bar-label">WK 4</span>
+                    </div>
+            </div>
+        </div>
+
+        <div class="content-card">
+            <div class="card-header-flex">
+                <h3 class="section-title">Recent Activity</h3>
+                <a href="#" class="view-all">View All</a>
+            </div>
+
+            <div class="transaction-list">
+                <div class="transaction-item">
+                        <div class="icon-circle gray-light">🍴</div>
+                        <div class="tx-details">
+                            <p class="tx-title">The Artisan Bakery</p>
+                            <p class="tx-subtitle">Food & Dining • Today</p>
+                        </div>
+                        <div class="tx-amount">- R 145.00</div>
+                    </div>
+
+            <div class="transaction-item">
+                        <div class="icon-circle gray-light">⚡</div>
+                        <div class="tx-details">
+                            <p class="tx-title">City Utility Grid</p>
+                            <p class="tx-subtitle">Bills • Yesterday</p>
+                        </div>
+                        <div class="tx-amount">- R 820.00</div>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="icon-circle gray-light">💻</div>
+                        <div class="tx-details">
+                            <p class="tx-title">Apple Store</p>
+                            <p class="tx-subtitle">Electronics • Oct 12</p>
+                        </div>
+                        <div class="tx-amount">- R 1,200.00</div>
+                    </div>
+
+                    <div class="transaction-item">
+                        <div class="icon-circle blue-light">🏢</div>
+                        <div class="tx-details">
+                            <p class="tx-title">TechCorp Salary</p>
+                            <p class="tx-subtitle">Income • Oct 01</p>
+                        </div>
+                        <div class="tx-amount positive-tx">+ R 85,000.00</div>
+                    </div>
+        </div>
+     </section>
+
+     <section class="innovation-layout">
+
+        <div class="content-card forecast-card">
+            <div class="forecast-content">
+                <h3 class="section-title">Wealth Forecast: 2030</h3>
+                <p class="forecast-text">Based on your current trajectory, your projected net worth in 4 years is <strong>R 12.4M</strong>. Tap to explore investment opportunities.</p>
+                <button class="btn-primary">Run Simulation</button>
+            </div>
+        </div>
+
+        <div class="content-card ai-coach-card">
+            <div class="icon-circle blue-light ai-icon">🤖</div>
+            <div class="ai-content">
+                <h3 class="section-title">AI Coach Recommendations</h3>
+                <p class="ai-text">You have R4,200 in idle cash. Moving this to your TFSA could save R1,200 in annual taxes.</p>
+            </div>
+            <button class="icon-btn add-btn">+</button>
+        </div>
+
+     </section>
+
+   </main>
+
+    </body>
+</html>

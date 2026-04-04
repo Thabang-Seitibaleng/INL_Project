@@ -1,0 +1,567 @@
+/* =========================================
+   1. GLOBAL VARIABLES & RESETS
+========================================= */
+:root {
+  --bg-body: #f4f5f7;
+  --bg-surface: #ffffff;
+  --text-main: #111827;
+  --text-muted: #6b7280;
+  --border-light: #e5e7eb;
+  --primary-blue: #3b82f6;
+  --trend-up: #059669;
+  --trend-down: #111827;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+body {
+  background-color: var(--bg-body);
+  color: var(--text-main);
+  -webkit-font-smoothing: antialiased;
+}
+
+/* =========================================
+   2. TYPOGRAPHY & UTILITIES
+========================================= */
+.text-positive {
+  color: var(--trend-up);
+}
+.text-white {
+  color: #ffffff;
+}
+.dark-label {
+  color: #9ca3af;
+}
+.blue-text {
+  color: var(--primary-blue);
+}
+.positive {
+  color: var(--trend-up);
+}
+.neutral {
+  color: var(--text-muted);
+}
+.title-sm {
+  text-transform: uppercase;
+  font-size: 13px;
+}
+
+/* Header Typography */
+.welcome-section,
+.page-header {
+  margin-bottom: 32px;
+}
+.flex-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+.page-header h2,
+.welcome-section h2 {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+.page-header .subtitle,
+.welcome-section .subtitle {
+  font-size: 15px;
+  color: var(--text-muted);
+  margin-top: 6px;
+}
+
+.section-title {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+.section-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 4px;
+}
+.view-all {
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--primary-blue);
+  text-decoration: none;
+}
+
+/* =========================================
+   3. LAYOUT & NAVIGATION
+========================================= */
+.top-navbar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 16px 48px;
+  background-color: var(--bg-surface);
+  border-bottom: 1px solid var(--border-light);
+  position: sticky;
+  top: 0;
+  z-index: 100;
+}
+
+.logo-area h1 {
+  font-size: 20px;
+  font-weight: 800;
+  letter-spacing: -0.5px;
+  color: var(--text-main);
+}
+.main-nav {
+  display: flex;
+  gap: 34px;
+}
+.nav-link {
+  text-decoration: none;
+  color: var(--text-muted);
+  font-size: 14px;
+  font-weight: 500;
+  transition: color 0.2s ease;
+}
+.nav-link:hover {
+  color: var(--text-main);
+}
+.nav-link.active {
+  color: var(--primary-blue);
+  font-weight: 600;
+}
+
+.header-actions {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+.nav-profile-img {
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  object-fit: cover;
+  border: 1px solid var(--border-light);
+}
+
+.dashboard-container {
+  width: 100%;
+  padding: 40px 48px;
+}
+.middle-layout {
+  display: grid;
+  grid-template-columns: 1.5fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+/* =========================================
+   4. COMPONENTS: CARDS & GRIDS
+========================================= */
+.metrics-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 24px;
+  margin-bottom: 32px;
+}
+.grid-3 {
+  grid-template-columns: repeat(3, 1fr);
+}
+
+.content-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 32px;
+  box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.02);
+}
+
+.metric-card {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  box-shadow: 0 4px 6px -4px rgba(0, 0, 0, 0.02);
+}
+
+.card-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 20px;
+  min-height: 24px;
+}
+.card-header-flex {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 32px;
+}
+
+/* The Dark Card Variant */
+.metric-card.card-dark {
+  background-color: #11111a;
+  border: none;
+}
+.metric-card.card-dark .metric-label {
+  color: #9ca3af;
+}
+.metric-card.card-dark .metric-value {
+  color: #ffffff;
+}
+
+/* Card Internal Typography */
+.metric-label {
+  font-size: 11px;
+  font-weight: 600;
+  color: var(--text-muted);
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+  margin-bottom: 8px;
+}
+.value-row {
+  display: flex;
+  align-items: baseline;
+  gap: 4px;
+  margin-bottom: 12px;
+}
+.metric-value {
+  font-size: 28px;
+  font-weight: 700;
+  color: var(--text-main);
+  letter-spacing: -0.5px;
+}
+.value-subtext {
+  font-size: 14px;
+  color: var(--text-muted);
+  font-weight: 500;
+}
+.trend-text {
+  font-size: 12px;
+  font-weight: 500;
+  margin-top: auto;
+}
+
+/* =========================================
+   5. COMPONENTS: BUTTONS, BADGES & ICONS
+========================================= */
+.btn-primary {
+  background-color: white;
+  color: #1e3a8a;
+  padding: 10px 24px;
+  border: none;
+  border-radius: 8px;
+  font-weight: 700;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.btn-primary:hover {
+  opacity: 0.9;
+}
+
+.icon-btn {
+  background: none;
+  border: none;
+  font-size: 18px;
+  cursor: pointer;
+  color: var(--text-muted);
+  transition: all 0.2s;
+}
+.icon-btn:hover {
+  transform: scale(1.1);
+}
+.add-btn {
+  background-color: var(--text-main);
+  color: white;
+  width: 36px;
+  height: 36px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 20px;
+  box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+}
+.add-btn:hover {
+  background-color: var(--primary-blue);
+  color: white;
+  transform: translateY(-2px);
+}
+
+.badge {
+  padding: 4px 10px;
+  border-radius: 12px;
+  font-size: 11px;
+  font-weight: 700;
+  letter-spacing: 0.5px;
+}
+.blue-badge {
+  background-color: var(--primary-blue);
+  color: white;
+}
+.green-badge {
+  background-color: #d1fae5;
+  color: var(--trend-up);
+}
+
+.sync-badge {
+  background-color: var(--bg-surface);
+  border: 1px solid var(--border-light);
+  padding: 8px 16px;
+  border-radius: 8px;
+  font-size: 13px;
+  font-weight: 600;
+  color: var(--text-main);
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+.sync-dot {
+  color: var(--trend-up);
+  font-size: 10px;
+}
+
+.icon-circle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 14px;
+}
+.blue-light {
+  background-color: #eff6ff;
+  color: var(--primary-blue);
+}
+.gray-light {
+  background-color: #f3f4f6;
+  color: var(--text-muted);
+}
+
+/* Toggles */
+.toggle-pill {
+  display: flex;
+  background-color: #f3f4f6;
+  border-radius: 20px;
+  padding: 4px;
+}
+.pill-btn {
+  background: none;
+  border: none;
+  padding: 6px 16px;
+  font-size: 11px;
+  font-weight: 700;
+  border-radius: 16px;
+  cursor: pointer;
+  color: var(--text-muted);
+}
+.pill-btn.active {
+  background-color: var(--primary-blue);
+  color: white;
+}
+.orange-light {
+  background-color: #fef3c7;
+  color: #d97706;
+}
+.fill-blue {
+  background-color: var(--primary-blue);
+}
+.fill-warning {
+  background-color: #f59e0b;
+}
+
+/* =========================================
+   6. COMPONENTS: CHARTS & BUDGET BARS
+========================================= */
+/* Bar Chart */
+.bar-chart {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  height: 200px;
+  padding-top: 20px;
+  border-bottom: 1px solid var(--border-light);
+  padding-bottom: 8px;
+}
+.bar-group {
+  display: flex;
+  align-items: flex-end;
+  gap: 8px;
+  height: 100%;
+  position: relative;
+  width: 20%;
+  justify-content: center;
+}
+.bar {
+  width: 24px;
+  border-radius: 6px 6px 0 0;
+  position: relative;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+.bar:hover {
+  opacity: 0.7;
+}
+.bar::after {
+  content: attr(data-value);
+  position: absolute;
+  top: -24px;
+  left: 50%;
+  transform: translateX(-50%);
+  background-color: var(--text-main);
+  color: var(--bg-surface);
+  padding: 6px 10px;
+  border-radius: 6px;
+  font-size: 11px;
+  font-weight: 600;
+  white-space: nowrap;
+  pointer-events: none;
+  opacity: 0;
+  visibility: hidden;
+  transition: all 0.2s ease;
+}
+.bar:hover::after {
+  opacity: 1;
+  visibility: visible;
+  top: -36px;
+}
+.light-blue {
+  background-color: #bfdbfe;
+}
+.dark-blue {
+  background-color: var(--primary-blue);
+}
+.bar-label {
+  position: absolute;
+  bottom: -24px;
+  font-size: 10px;
+  font-weight: 600;
+  color: var(--text-muted);
+}
+
+/* Budget Progress Bars */
+.budget-list {
+  display: flex;
+  flex-direction: column;
+  gap: 32px;
+}
+.budget-info {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 12px;
+}
+.progress-track {
+  width: 100%;
+  height: 8px;
+  background-color: #f3f4f6;
+  border-radius: 6px;
+  overflow: hidden;
+  margin-bottom: 6px;
+}
+.progress-fill {
+  height: 100%;
+  border-radius: 6px;
+  transition: width 0.5s ease-in-out;
+}
+.progress-label {
+  text-align: right;
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* =========================================
+   7. COMPONENTS: LISTS
+========================================= */
+.transaction-list {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+.transaction-item {
+  display: flex;
+  align-items: center;
+}
+.tx-details {
+  margin-left: 16px;
+  flex: 1;
+}
+.tx-title {
+  font-size: 14px;
+  font-weight: 600;
+  color: var(--text-main);
+}
+.tx-subtitle {
+  font-size: 12px;
+  color: var(--text-muted);
+  margin-top: 2px;
+}
+.tx-amount {
+  font-size: 14px;
+  font-weight: 700;
+  color: var(--text-main);
+}
+.positive-tx {
+  color: var(--primary-blue);
+}
+
+/* =========================================
+   8. PAGE SPECIFICS: INNOVATION SUITE
+========================================= */
+.innovation-layout {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 60px;
+}
+.forecast-card {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  color: white;
+  border: none;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+  justify-content: center;
+}
+.forecast-card .section-title {
+  color: white;
+  font-size: 20px;
+  margin-bottom: 8px;
+}
+.forecast-text {
+  font-size: 14px;
+  color: #dbeafe;
+  margin-bottom: 24px;
+  line-height: 1.5;
+  max-width: 90%;
+}
+
+.ai-coach-card {
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  gap: 20px;
+}
+.ai-icon {
+  width: 56px;
+  height: 56px;
+  font-size: 28px;
+  flex-shrink: 0;
+}
+.ai-content {
+  flex: 1;
+}
+.ai-text {
+  font-size: 14px;
+  color: var(--text-muted);
+  margin-top: 6px;
+  line-height: 1.5;
+  font-style: italic;
+}
