@@ -1,0 +1,1 @@
+**Market average data & prediction scripts**
