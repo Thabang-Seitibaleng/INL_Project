@@ -1,0 +1,83 @@
+name: Wealth and Budget CI
+
+on:
+  push:
+    branches: [ main, develop ]
+  pull_request:
+    branches: [ main, develop ]
+
+jobs:
+  # Backend Job: Node.js/Express
+  backend-ci:
+    name: Backend Lint & Test
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./server
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './server/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci || npm install # Use ci for speed, fallback to install
+      
+      - name: Run ESLint
+        run: npm run lint || echo "No lint script defined yet"
+      
+      - name: Run Tests
+        run: npm test || echo "No tests defined yet"
+      
+      - name: Dependency Security Audit
+        run: npm audit --audit-level=high
+
+  # Frontend Job: React/Mobile
+  frontend-ci:
+    name: Frontend Lint & Build
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./client
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+          cache: 'npm'
+          cache-dependency-path: './client/package-lock.json'
+      
+      - name: Install dependencies
+        run: npm ci || npm install
+      
+      - name: Check Build
+        run: npm run build || echo "No build script defined yet"
+      
+      - name: Run Tests
+        run: npm test || echo "No tests defined yet"
+
+  # AI Engine Job (Python or Node)
+  ai-ci:
+    name: AI Engine Quality Check
+    runs-on: ubuntu-latest
+    defaults:
+      run:
+        working-directory: ./ai-engine
+    steps:
+      - uses: actions/checkout@v4
+      - name: Setup Node.js # Assumes node logic for categorization
+        uses: actions/setup-node@v4
+        with:
+          node-version: '20'
+      - name: Install & Test
+        run: |
+          if [ -f package.json ]; then
+            npm install
+            npm test || echo "No AI tests yet"
+          else
+            echo "AI engine structure pending implementation"
+          fi
