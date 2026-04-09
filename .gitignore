@@ -1,2 +1,14 @@
+# Dependencies
 node_modules/
+dist/
+build/
 .env
+*.log
+
+# Mobile artifacts
+android/
+ios/
+
+# OS files
+.DS_Store
+Thumbs.db
