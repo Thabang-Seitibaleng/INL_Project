@@ -13,6 +13,10 @@ app.get("/cashflow", (req, res) => {
   res.render("cashflow");
 });
 
+app.get("/portfolio", (req, res) => {
+  res.render("portfolio");
+});
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });

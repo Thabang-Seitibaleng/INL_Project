@@ -1,0 +1,295 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Architect | Portfolio</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+  <body>
+    <%- include('partials/navbar') %>
+
+    <main class="dashboard-container">
+      <header class="page-header flex-header">
+        <div>
+          <h2>Portfolio Command</h2>
+          <p class="subtitle">Unified cross-platform asset architecture.</p>
+        </div>
+        <div class="header-actions">
+          <div class="sync-badge">
+            <span class="sync-dot">●</span> Live Sync Active
+          </div>
+        </div>
+      </header>
+
+      <section class="metrics-grid grid-3">
+        <div class="metric-card card-dark span-2">
+          <span class="metric-label">Total Account Value</span>
+          <div class="value-row">
+            <span class="ee-massive-value">R 342,500.00</span>
+          </div>
+          <div class="ee-return-pill positive-bg">
+            <span>+ R 14,200.50 (4.32%)</span>
+          </div>
+        </div>
+
+        <div class="metric-card">
+          <span class="metric-label">Available Cash</span>
+          <div class="value-row">
+            <span class="metric-value">R 12,450.00</span>
+          </div>
+          <button class="btn-primary ee-deposit-btn">Deposit Funds</button>
+        </div>
+      </section>
+
+      <section class="metrics-grid grid-2">
+        <div class="content-card chart-section" style="margin-bottom: 0">
+          <div class="card-header-flex">
+            <h3 class="section-title title-sm">Performance History</h3>
+            <div class="toggle-pill">
+              <button class="pill-btn">1M</button>
+              <button class="pill-btn active">1Y</button>
+            </div>
+          </div>
+
+          <div class="chart-layout">
+            <div class="chart-y-axis">
+              <span>R 400k</span>
+              <span>R 300k</span>
+              <span>R 200k</span>
+            </div>
+
+            <div class="chart-main-area">
+              <div class="chart-grid-lines">
+                <div class="grid-line"></div>
+                <div class="grid-line"></div>
+                <div class="grid-line"></div>
+                <div class="grid-line-bottom"></div>
+
+                <svg class="chart-svg" preserveAspectRatio="none">
+                  <path
+                    class="chart-fill"
+                    d="M0,200 C150,180 300,220 450,150 C600,80 750,120 1000,40 L1000,240 L0,240 Z"
+                  ></path>
+                  <path
+                    class="chart-stroke"
+                    d="M0,200 C150,180 300,220 450,150 C600,80 750,120 1000,40"
+                  ></path>
+                </svg>
+              </div>
+
+              <div class="chart-x-axis">
+                <span>Jan</span>
+                <span>May</span>
+                <span>Sep</span>
+                <span class="text-positive">Now</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-header-flex">
+            <h3 class="section-title title-sm">Top Movers (7 Days)</h3>
+            <button class="icon-btn">⋮</button>
+          </div>
+
+          <div class="transaction-list">
+            <div class="transaction-item">
+              <div
+                class="icon-circle"
+                style="
+                  background-color: rgba(5, 150, 105, 0.1);
+                  color: var(--trend-up);
+                "
+              >
+                ↑
+              </div>
+              <div class="tx-details">
+                <p class="tx-title">Bitcoin (BTC)</p>
+                <p class="tx-subtitle">Digital Asset</p>
+              </div>
+              <div style="text-align: right">
+                <p class="tx-amount positive">+ 12.4%</p>
+                <p class="tx-subtitle">R 52,100</p>
+              </div>
+            </div>
+
+            <div class="transaction-item">
+              <div
+                class="icon-circle"
+                style="
+                  background-color: rgba(5, 150, 105, 0.1);
+                  color: var(--trend-up);
+                "
+              >
+                ↑
+              </div>
+              <div class="tx-details">
+                <p class="tx-title">Apple Inc. (AAPL)</p>
+                <p class="tx-subtitle">Equities</p>
+              </div>
+              <div style="text-align: right">
+                <p class="tx-amount positive">+ 4.2%</p>
+                <p class="tx-subtitle">R 39,183</p>
+              </div>
+            </div>
+
+            <div class="transaction-item">
+              <div
+                class="icon-circle"
+                style="background-color: #fef2f2; color: #ef4444"
+              >
+                ↓
+              </div>
+              <div class="tx-details">
+                <p class="tx-title">Naspers Ltd (NPN)</p>
+                <p class="tx-subtitle">Equities</p>
+              </div>
+              <div style="text-align: right">
+                <p class="tx-amount negative">- 2.1%</p>
+                <p class="tx-subtitle">R 15,400</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+
+      <section class="metrics-grid grid-2-1">
+        <div class="content-card">
+          <div class="card-header-flex">
+            <h3 class="section-title title-sm">Your Holdings</h3>
+            <div class="toggle-pill">
+              <button class="pill-btn active">Equities</button>
+              <button class="pill-btn">Crypto</button>
+            </div>
+          </div>
+
+          <div class="holdings-list">
+            <div class="ee-holding-item">
+              <div class="ee-holding-left">
+                <div class="icon-circle fill-blue ee-icon" style="color: white">
+                  A
+                </div>
+                <div>
+                  <p class="tx-title">Apple Inc. (AAPL)</p>
+                  <p class="tx-subtitle">12.4582 Shares @ R 3,145.20</p>
+                </div>
+              </div>
+              <div class="ee-holding-right">
+                <p class="tx-amount">R 39,183.49</p>
+                <p class="tx-subtitle positive">+ R 4,200 (12.4%)</p>
+              </div>
+            </div>
+
+            <div class="ee-holding-item">
+              <div class="ee-holding-left">
+                <div
+                  class="icon-circle ee-icon"
+                  style="background-color: #00a65a; color: white"
+                >
+                  N
+                </div>
+                <div>
+                  <p class="tx-title">Naspers Ltd (NPN)</p>
+                  <p class="tx-subtitle">4.0000 Shares @ R 3,850.00</p>
+                </div>
+              </div>
+              <div class="ee-holding-right">
+                <p class="tx-amount">R 15,400.00</p>
+                <p class="tx-subtitle negative">- R 350 (-2.2%)</p>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="content-card">
+          <div class="card-header-flex">
+            <h3 class="section-title title-sm">Account Vaults</h3>
+          </div>
+
+          <div class="vault-list">
+            <div class="vault-card vault-investec">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <span class="vault-brand">INVESTEC</span>
+                <span class="vault-type">Cash Reserve</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: flex-end;
+                "
+              >
+                <span class="vault-type" style="margin-bottom: 0"
+                  >Available</span
+                >
+                <span class="vault-balance">R 62,500</span>
+              </div>
+            </div>
+
+            <div class="vault-card vault-easy">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <span class="vault-brand">EASYEQUITIES</span>
+                <span class="vault-type">ZAR Portfolio</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: flex-end;
+                "
+              >
+                <span class="vault-type" style="margin-bottom: 0"
+                  >Invested</span
+                >
+                <span class="vault-balance">R 215,000</span>
+              </div>
+            </div>
+
+            <div class="vault-card vault-luno">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: center;
+                "
+              >
+                <span class="vault-brand">LUNO</span>
+                <span class="vault-type">Digital Wallet</span>
+              </div>
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  align-items: flex-end;
+                "
+              >
+                <span class="vault-type" style="margin-bottom: 0"
+                  >Holdings</span
+                >
+                <span class="vault-balance">R 65,000</span>
+              </div>
+            </div>
+          </div>
+        </div>
+      </section>
+    </main>
+  </body>
+</html>
