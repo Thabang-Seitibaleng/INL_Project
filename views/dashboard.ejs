@@ -1,22 +1,20 @@
 <!DOCTYPE html>
 <html lang="en">
-    <head></head>
+    <head>
         <meta charset="UTF-8">
         <meta name="viewport" content="width=device-width, initial-scale=1.0">
         <title>Architech Wealth Suite</title>
-        <link rel="stylesheet" href="style.css"/>
+        <link rel="stylesheet" href="/style.css"/>
     </head>
     <body>
     <%- include('partials/navbar') %>
 
    <main class="dashboard-container">
-    <!-- Welcome Section -->
     <div class="welcome-section">
-        <h2>Welcome back Claudine.</h2>
+        <h2>Welcome back <%= data.firstName %>.</h2>
         <p class="subtitle">Here's what's happening with your portfolio.</p>
     </div>
 
-    <!-- Portfolio Summary -->
     <section class="metrics-grid">
 
         <div class="metric-card">
@@ -26,48 +24,47 @@
             </div>
             <p class="metric-label">FINANCIAL HEALTH SCORE</p>
             <div class="value-row">
-                <h3 class="metric-value">720</h3>
+                <h3 class="metric-value"><%= data.healthScore %></h3>
                 <span class="value-subtext">/1000</span>
             </div>
-            <p class="trend text positive">↗ +12 points this month</p>
+            <p class="trend text positive"><%= data.healthTrend %></p>
         </div>
 
         <div class="metric-card">
-                <div class="card-header">
-                    <div class="icon-circle gray-light">💳</div>
-                </div>
-                <p class="metric-label">TOTAL BALANCE</p>
-                <div class="value-row">
-                    <h3 class="metric-value">R 4,892,120.00</h3>
-                </div>
-                <p class="trend-text">&nbsp;</p> 
+            <div class="card-header">
+                <div class="icon-circle gray-light">💳</div>
             </div>
+            <p class="metric-label">TOTAL BALANCE</p>
+            <div class="value-row">
+                <h3 class="metric-value">R <%= data.totalBalance %></h3>
+            </div>
+            <p class="trend-text">&nbsp;</p> 
+        </div>
 
-            <div class="metric-card">
-                <div class="card-header">
-                    <div class="icon-circle gray-light">💵</div>
-                </div>
-                <p class="metric-label">MONTHLY INCOME</p>
-                <div class="value-row">
-                    <h3 class="metric-value">R 85,400.00</h3>
-                </div>
-                <p class="trend-text neutral">⏱ Next deposit in 4 days</p>
+        <div class="metric-card">
+            <div class="card-header">
+                <div class="icon-circle gray-light">💵</div>
             </div>
+            <p class="metric-label">MONTHLY INCOME</p>
+            <div class="value-row">
+                <h3 class="metric-value">R <%= data.monthlyIncome %></h3>
+            </div>
+            <p class="trend-text neutral"><%= data.incomeTrend %></p>
+        </div>
 
-            <div class="metric-card">
-                <div class="card-header">
-                    <div class="icon-circle blue-light">🛡️</div>
-                </div>
-                <p class="metric-label">SAFE TO SPEND</p>
-                <div class="value-row">
-                    <h3 class="metric-value">R 12,300.00</h3>
-                </div>
-                <p class="trend-text blue-text">Daily limit: R 450</p>
+        <div class="metric-card">
+            <div class="card-header">
+                <div class="icon-circle blue-light">🛡️</div>
             </div>
+            <p class="metric-label">SAFE TO SPEND</p>
+            <div class="value-row">
+                <h3 class="metric-value">R <%= data.safeToSpend %></h3>
+            </div>
+            <p class="trend-text blue-text"><%= data.spendLimit %></p>
+        </div>
     </section>
 
-    <!-- Recent Activity -->
-     <section class="middle-layout">
+    <section class="middle-layout">
         <div class="content-card">
             <div class="card-header-flex">
                 <div>
@@ -88,22 +85,22 @@
                 </div>
 
                 <div class="bar-group">
-                        <div class="bar light-blue" style="height: 55%;" data-value="R3,300"></div>
-                        <div class="bar dark-blue" style="height: 45%;" data-value="R2,700"></div>
-                        <span class="bar-label">WK 2</span>
-                    </div>
+                    <div class="bar light-blue" style="height: 55%;" data-value="R3,300"></div>
+                    <div class="bar dark-blue" style="height: 45%;" data-value="R2,700"></div>
+                    <span class="bar-label">WK 2</span>
+                </div>
 
-                    <div class="bar-group">
-                        <div class="bar light-blue" style="height: 70%;" data-value="R4,200"></div>
-                        <div class="bar dark-blue" style="height: 30%;" data-value="R1,800"></div>
-                        <span class="bar-label">WK 3</span>
-                    </div>
+                <div class="bar-group">
+                    <div class="bar light-blue" style="height: 70%;" data-value="R4,200"></div>
+                    <div class="bar dark-blue" style="height: 30%;" data-value="R1,800"></div>
+                    <span class="bar-label">WK 3</span>
+                </div>
 
-                    <div class="bar-group">
-                        <div class="bar light-blue" style="height: 85%;" data-value="R5,100"></div>
-                        <div class="bar dark-blue" style="height: 100%;" data-value="R6,000"></div>
-                        <span class="bar-label">WK 4</span>
-                    </div>
+                <div class="bar-group">
+                    <div class="bar light-blue" style="height: 85%;" data-value="R5,100"></div>
+                    <div class="bar dark-blue" style="height: 100%;" data-value="R6,000"></div>
+                    <span class="bar-label">WK 4</span>
+                </div>
             </div>
         </div>
 
@@ -114,41 +111,21 @@
             </div>
 
             <div class="transaction-list">
-                <div class="transaction-item">
-                        <div class="icon-circle gray-light">🍴</div>
-                        <div class="tx-details">
-                            <p class="tx-title">The Artisan Bakery</p>
-                            <p class="tx-subtitle">Food & Dining • Today</p>
-                        </div>
-                        <div class="tx-amount">- R 145.00</div>
-                    </div>
-
-            <div class="transaction-item">
-                        <div class="icon-circle gray-light">⚡</div>
-                        <div class="tx-details">
-                            <p class="tx-title">City Utility Grid</p>
-                            <p class="tx-subtitle">Bills • Yesterday</p>
-                        </div>
-                        <div class="tx-amount">- R 820.00</div>
-                    </div>
-
+                <% data.transactions.forEach(function(tx) { %>
                     <div class="transaction-item">
-                        <div class="icon-circle gray-light">💻</div>
-                        <div class="tx-details">
-                            <p class="tx-title">Apple Store</p>
-                            <p class="tx-subtitle">Electronics • Oct 12</p>
+                        <div class="icon-circle <%= tx.amount > 0 ? 'blue-light' : 'gray-light' %>">
+                            <%= tx.amount > 0 ? '🏢' : '💳' %>
                         </div>
-                        <div class="tx-amount">- R 1,200.00</div>
-                    </div>
-
-                    <div class="transaction-item">
-                        <div class="icon-circle blue-light">🏢</div>
                         <div class="tx-details">
-                            <p class="tx-title">TechCorp Salary</p>
-                            <p class="tx-subtitle">Income • Oct 01</p>
+                            <p class="tx-title"><%= tx.merchant %></p>
+                            <p class="tx-subtitle"><%= tx.category %> • <%= tx.date %></p>
                         </div>
-                        <div class="tx-amount positive-tx">+ R 85,000.00</div>
+                        <div class="tx-amount <%= tx.amount > 0 ? 'positive-tx' : '' %>">
+                            <%= tx.amount > 0 ? '+' : '-' %> R <%= Math.abs(tx.amount).toLocaleString('en-ZA', { minimumFractionDigits: 2 }) %>
+                        </div>
                     </div>
+                <% }); %>
+            </div>
         </div>
      </section>
 
