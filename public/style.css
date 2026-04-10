@@ -92,6 +92,24 @@ body {
   color: var(--primary-blue);
   text-decoration: none;
 }
+/* Add these right below your other text utility classes (like .text-positive) */
+.text-24 {
+  font-size: 24px;
+}
+
+/* Spacing Utilities */
+.mb-32 {
+  margin-bottom: 32px;
+}
+.mb-16 {
+  margin-bottom: 16px;
+}
+.mb-0 {
+  margin-bottom: 0;
+}
+.mt-8 {
+  margin-top: 8px;
+}
 
 /* =========================================
    3. LAYOUT & NAVIGATION
@@ -714,6 +732,10 @@ body {
   gap: 16px;
 }
 
+.chart-tall {
+  height: 320px;
+}
+
 .chart-y-axis {
   display: flex;
   flex-direction: column;
@@ -785,4 +807,236 @@ body {
   font-weight: 600;
   margin-top: 12px;
   padding: 0 5px;
+}
+/* =========================================
+   12. FORECASTER COMPONENTS
+========================================= */
+
+/* Modern Input Styling */
+.modern-input-group {
+  display: flex;
+  flex-direction: column;
+  background-color: var(--bg-body);
+  padding: 16px 20px;
+  border-radius: 12px;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.modern-input-group:focus-within {
+  border-color: var(--primary-blue);
+  background-color: var(--bg-surface);
+  box-shadow: 0 4px 12px rgba(59, 130, 246, 0.08);
+}
+
+.modern-label {
+  font-size: 11px;
+  font-weight: 700;
+  color: var(--text-muted);
+  margin-bottom: 8px;
+  text-transform: uppercase;
+  letter-spacing: 0.8px;
+}
+
+.modern-input-wrapper {
+  display: flex;
+  align-items: baseline;
+  gap: 8px;
+}
+
+.modern-input {
+  border: none;
+  background: transparent;
+  flex: 1;
+  font-size: 28px;
+  font-weight: 800;
+  color: var(--text-main);
+  outline: none;
+  width: 100%;
+  letter-spacing: -0.5px;
+  -moz-appearance: textfield;
+}
+
+.modern-input::-webkit-outer-spin-button,
+.modern-input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+.input-prefix,
+.input-suffix {
+  font-size: 16px;
+  font-weight: 700;
+  color: var(--text-muted);
+}
+
+/* Prediction Chart Specifics */
+.forecast-confidence {
+  fill: rgba(59, 130, 246, 0.12); /* Clean, transparent blue shade */
+}
+
+.forecast-line {
+  fill: none;
+  stroke: var(--primary-blue); /* Solid blue line */
+  stroke-width: 3;
+  /* We removed the stroke-dasharray to make the line solid */
+}
+/* =========================================
+   13. ATLAS AI COACH COMPONENTS
+========================================= */
+.chat-history {
+  flex: 1;
+  padding: 24px;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+  background-color: #f9fafb;
+}
+
+.chat-message {
+  display: flex;
+  align-items: flex-end;
+  max-width: 85%;
+}
+
+.atlas-msg {
+  align-self: flex-start;
+}
+
+.user-msg {
+  align-self: flex-end;
+}
+
+.chat-avatar {
+  width: 32px;
+  height: 32px;
+  border-radius: 8px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 800;
+  font-size: 14px;
+  margin-right: 12px;
+  flex-shrink: 0;
+}
+
+.atlas-avatar {
+  background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+  color: white;
+}
+
+.chat-bubble {
+  padding: 16px;
+  border-radius: 16px;
+  font-size: 14px;
+  line-height: 1.5;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.02);
+}
+
+.atlas-bubble {
+  background-color: white;
+  color: var(--text-main);
+  border: 1px solid var(--border-light);
+  border-bottom-left-radius: 4px;
+}
+
+.user-bubble {
+  background-color: var(--text-main);
+  color: white;
+  border-bottom-right-radius: 4px;
+}
+
+.chat-input-area {
+  padding: 20px 24px;
+  background-color: white;
+  border-top: 1px solid var(--border-light);
+  display: flex;
+  gap: 16px;
+  border-bottom-left-radius: 16px;
+  border-bottom-right-radius: 16px;
+}
+
+.chat-input {
+  flex: 1;
+  background-color: #f3f4f6;
+  border: 1px solid transparent;
+  padding: 12px 16px;
+  border-radius: 8px;
+  font-size: 14px;
+  outline: none;
+  transition: all 0.2s;
+}
+
+.chat-input:focus {
+  background-color: white;
+  border-color: var(--primary-blue);
+  box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+}
+
+.chat-send-btn {
+  background-color: var(--primary-blue);
+  color: white;
+  border: none;
+  padding: 0 24px;
+  border-radius: 8px;
+  font-weight: 600;
+  cursor: pointer;
+  transition: opacity 0.2s;
+}
+
+.chat-send-btn:hover {
+  opacity: 0.9;
+}
+
+/* Typing Indicator Animation */
+.typing-indicator {
+  display: flex;
+  gap: 4px;
+  padding: 16px 20px;
+}
+
+.typing-indicator span {
+  width: 6px;
+  height: 6px;
+  background-color: var(--text-muted);
+  border-radius: 50%;
+  animation: typing 1.4s infinite both;
+}
+
+.typing-indicator span:nth-child(1) {
+  animation-delay: 0s;
+}
+.typing-indicator span:nth-child(2) {
+  animation-delay: 0.2s;
+}
+.typing-indicator span:nth-child(3) {
+  animation-delay: 0.4s;
+}
+
+@keyframes typing {
+  0%,
+  80%,
+  100% {
+    transform: scale(0);
+    opacity: 0.5;
+  }
+  40% {
+    transform: scale(1);
+    opacity: 1;
+  }
+}
+
+/* Insight Cards */
+.insight-card {
+  display: flex;
+  gap: 16px;
+  padding: 16px;
+  background-color: var(--bg-body);
+  border-radius: 12px;
+  border: 1px solid var(--border-light);
+}
+
+.insight-icon {
+  font-size: 20px;
 }

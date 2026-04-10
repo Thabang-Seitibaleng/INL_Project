@@ -17,6 +17,14 @@ app.get("/portfolio", (req, res) => {
   res.render("portfolio");
 });
 
+app.get("/forecaster", (req, res) => {
+  res.render("forecaster");
+});
+
+app.get("/atlas", (req, res) => {
+  res.render("atlas");
+});
+
 app.listen(port, () => {
   console.log(`Server is running at http://localhost:${port}`);
 });

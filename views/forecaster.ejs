@@ -1,0 +1,139 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Architect | Forecaster</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+  </head>
+</html>
+<body>
+  <%- include('partials/navbar') %>
+
+  <main class="dashboard-container">
+    <header class="page-header flex-header">
+      <div>
+        <h2>Financial Forecaster</h2>
+        <p class="subtitle">
+          Future financial projections and milestone modeling
+        </p>
+      </div>
+      <div class="header-actions">
+        <div class="sync-badge">
+          <span class="sync-dot">●</span>
+          Engine Ready
+        </div>
+      </div>
+    </header>
+    <section class="metrics-grid grid-3">
+      <div class="metric-card card-dark">
+        <div class="icon-circle fill-blue mb-16 text-white">🎯</div>
+        <span class="metric-label">Projected Final Value</span>
+        <span class="metric-value text-24 text-white">R 1,845,200</span>
+        <span class="trend-text positive-tx mt-8">In Year 10</span>
+      </div>
+
+      <div class="metric-card">
+        <div class="icon-circle orange-light mb-16">⏱️</div>
+        <span class="metric-label">R 1M Milestone Reached</span>
+        <span class="metric-value text-24">Year 6.2</span>
+        <span class="trend-text neutral mt-8">Based on 10.5% return</span>
+      </div>
+
+      <div class="metric-card">
+        <div class="icon-circle green-badge mb-16">📈</div>
+        <span class="metric-label">Total Interest Earned</span>
+        <span class="metric-value text-24">R 902,700</span>
+        <span class="trend-text text-positive mt-8">48.9% of final value</span>
+      </div>
+    </section>
+
+    <section class="content-card chart-section">
+      <div class="card-header-flex">
+        <h3 class="section-title title-sm">
+          Growth Trajectory (10-Year Model)
+        </h3>
+        <div class="toggle-pill">
+          <button class="pill-btn active">Optimized</button>
+          <button class="pill-btn">Conservative</button>
+        </div>
+      </div>
+
+      <div class="chart-layout chart-tall">
+        <div class="chart-y-axis">
+          <span>R 2.0M</span>
+          <span>R 1.5M</span>
+          <span>R 1.0M</span>
+          <span>R 500k</span>
+          <span>0</span>
+        </div>
+
+        <div class="chart-main-area">
+          <div class="chart-grid-lines">
+            <div class="grid-line"></div>
+            <div class="grid-line"></div>
+            <div class="grid-line"></div>
+            <div class="grid-line"></div>
+            <div class="grid-line-bottom"></div>
+
+            <svg class="chart-svg" preserveAspectRatio="none">
+              <path
+                class="forecast-confidence"
+                d="M0,280 C200,260 400,200 600,120 C800,50 900,20 1000,0 L1000,320 L0,320 Z"
+              ></path>
+              <path
+                class="forecast-line"
+                d="M0,280 C200,260 400,200 600,120 C800,50 900,20 1000,0"
+              ></path>
+            </svg>
+          </div>
+
+          <div class="chart-x-axis">
+            <span>Today</span>
+            <span>Year 2</span>
+            <span>Year 4</span>
+            <span>Year 6</span>
+            <span>Year 8</span>
+            <span class="text-positive">Year 10</span>
+          </div>
+        </div>
+      </div>
+    </section>
+    <section class="content-card mb-32">
+      <div class="card-header-flex mb-16">
+        <h3 class="section-title title-sm">Simulation Parameters</h3>
+        <button class="btn-primary">Run Projection</button>
+      </div>
+
+      <div class="metrics-grid grid-3 mb-0">
+        <div class="modern-input-group">
+          <label class="modern-label">Monthly Contribution</label>
+          <div class="modern-input-wrapper">
+            <span class="input-prefix">R</span>
+            <input type="number" class="modern-input" value="5000" />
+          </div>
+        </div>
+
+        <div class="modern-input-group">
+          <label class="modern-label">Target Annual Return</label>
+          <div class="modern-input-wrapper">
+            <input type="number" class="modern-input" value="10.5" />
+            <span class="input-suffix">%</span>
+          </div>
+        </div>
+
+        <div class="modern-input-group">
+          <label class="modern-label">Projection Horizon</label>
+          <div class="modern-input-wrapper">
+            <input type="number" class="modern-input" value="10" />
+            <span class="input-suffix">Years</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
