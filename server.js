@@ -3,27 +3,17 @@ const axios = require("axios"); // Used to call Stitch
 
 async function getStitchToken() {
   try {
-    const tokenURL = "https://api.stitch.money/v1/auth/token";
+    console.log("Requesting stitch token...");
 
-    const params = new URLSearchParams();
-    params.append("client_id", process.env.STITCH_CLIENT_ID);
-    params.append("client_secret", process.env.STITCH_CLIENT_SECRET);
-    params.append("grant_type", "client_credentials");
-    params.append("audience", "https://secure.stitch.money/connect/token");
+    await new Promise((resolve) => setTimeout(resolve, 800)); // Simulating network delay
 
-    const responce = await axios.post(tokenURL, params, {
-      headers: {
-        "Content-Type": "application/x-www-form-urlencoded",
-      },
-    });
-
-    console.log("🟢 Stitch Authentication Successful");
-    return responce.data.access_token;
+    if (!process.env.STITCH_CLIENT_ID) {
+      throw new Error("missing client id");
+    }
+    console.log("🟢 Stitch Authentication Successful (Simulated)");
+    return "stitch_token_xyz_89012345";
   } catch (error) {
-    console.error(
-      "🔴 Stitch Auth Failed:",
-      error.response ? error.response.data : error.message,
-    );
+    console.error("🔴 Stitch Authentication Failed:", error.message);
     return null;
   }
 }
