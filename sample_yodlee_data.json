@@ -1,0 +1,72 @@
+{
+  "account": [
+    {
+      "CONTAINER": "creditCard",
+      "providerAccountId": 11363640,
+      "accountName": "PLATINUM CREDIT",
+      "accountStatus": "ACTIVE",
+      "accountNumber": "xxxx8614",
+      "aggregationSource": "USER",
+      "isAsset": false,
+      "balance": {
+        "currency": "ZAR",
+        "amount": 5240.5
+      },
+      "id": 12554386,
+      "userClassification": "PERSONAL",
+      "includeInNetWorth": true,
+      "providerId": "16441",
+      "providerName": "Dag Site",
+      "isManual": false,
+      "accountType": "OTHER",
+      "totalCashLimit": {
+        "currency": "ZAR",
+        "amount": 5000
+      },
+      "totalCreditLine": {
+        "currency": "ZAR",
+        "amount": 20000
+      }
+    },
+    {
+      "CONTAINER": "bank",
+      "providerAccountId": 11363640,
+      "accountName": "WEALTH SAVINGS",
+      "accountStatus": "ACTIVE",
+      "accountNumber": "xxxx3111",
+      "aggregationSource": "USER",
+      "isAsset": true,
+      "balance": {
+        "currency": "ZAR",
+        "amount": 145000.0
+      },
+      "id": 12554385,
+      "userClassification": "PERSONAL",
+      "includeInNetWorth": true,
+      "providerId": "16441",
+      "providerName": "Dag Site",
+      "isManual": false,
+      "accountType": "SAVINGS"
+    },
+    {
+      "CONTAINER": "bank",
+      "providerAccountId": 11363640,
+      "accountName": "EVERYDAY CHECKING",
+      "accountStatus": "ACTIVE",
+      "accountNumber": "xxxx3222",
+      "aggregationSource": "USER",
+      "isAsset": true,
+      "balance": {
+        "currency": "ZAR",
+        "amount": 38500.0
+      },
+      "id": 12554384,
+      "userClassification": "PERSONAL",
+      "includeInNetWorth": true,
+      "providerId": "16441",
+      "providerName": "Dag Site",
+      "isManual": false,
+      "accountType": "CHECKING"
+    }
+  ]
+}

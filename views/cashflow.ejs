@@ -25,21 +25,23 @@
             <p class="metric-label">TOTAL INFLOW</p>
             <span class="badge green-badge">● Inflow</span>
           </div>
-          <h3 class="metric-value text-positive">+ R 85,400.00</h3>
+          <h3 class="metric-value text-positive">+ R <%= data.inflow %></h3>
         </div>
 
         <div class="metric-card">
           <div class="card-header">
             <p class="metric-label">CASH OUTFLOW</p>
           </div>
-          <h3 class="metric-value">- R 42,750.00</h3>
+          <h3 class="metric-value">- R <%= data.outflow %></h3>
         </div>
 
         <div class="metric-card card-dark">
           <div class="card-header">
             <p class="metric-label dark-label">NET CASHFLOW</p>
           </div>
-          <h3 class="metric-value text-white">+ R 42,650.00</h3>
+          <h3 class="metric-value text-white">
+            <%= data.netIsPositive ? '+' : '-' %> R <%= data.net %>
+          </h3>
         </div>
       </section>
 
@@ -49,6 +51,7 @@
             <h3 class="section-title">Budget Utilization</h3>
           </div>
 
+          <!-- Note: Budget goals are hardcoded until we build a database! -->
           <div class="budget-list">
             <div class="budget-item">
               <div class="budget-info">
@@ -67,10 +70,7 @@
                 <span class="tx-subtitle">⚠️ R 4,500 / R 5,000</span>
               </div>
               <div class="progress-track">
-                <div
-                  class="progress-fill fill-warning"
-                  style="width: 90%"
-                ></div>
+                <div class="progress-fill fill-warning" style="width: 90%"></div>
               </div>
               <div class="progress-label">90%</div>
             </div>
@@ -81,9 +81,9 @@
                 <span class="tx-subtitle">R 2,100 / R 3,000</span>
               </div>
               <div class="progress-track">
-                <div class="progress-fill"></div>
+                <div class="progress-fill fill-blue" style="width: 70%"></div>
               </div>
-              <div class="progress-label fill-blue" style="width: 70%">70%</div>
+              <div class="progress-label">70%</div>
             </div>
           </div>
         </div>
@@ -99,41 +99,20 @@
           </div>
 
           <div class="transaction-list">
-            <div class="transaction-item">
-              <div class="icon-circle">🍴</div>
-              <div class="tx-details">
-                <p class="tx-title">The Artisan Bakery</p>
-                <p class="tx-subtitle">Food & Dining • Today</p>
-              </div>
-              <div class="tx-amount">- R 145.00</div>
-            </div>
-
-            <div class="transaction-item">
-              <div class="icon-circle">⚡</div>
-              <div class="tx-details">
-                <p class="tx-title">City Utility Grid</p>
-                <p class="tx-subtitle">Bills • Yesterday</p>
-              </div>
-              <div class="tx-amount">- R 820.00</div>
-            </div>
-
-            <div class="transaction-item">
-              <div class="icon-circle gray-light">💻</div>
-              <div class="tx-details">
-                <p class="tx-title">Apple Store</p>
-                <p class="tx-subtitle">Electronics • Oct 12</p>
-              </div>
-              <div class="tx-amount">- R 1,200.00</div>
-            </div>
-
-            <div class="transaction-item">
-              <div class="icon-circle blue-light">🏢</div>
-              <div class="tx-details">
-                <p class="tx-title">TechCorp Salary</p>
-                <p class="tx-subtitle">Income • Oct 01</p>
-              </div>
-              <div class="tx-amount positive-tx">+ R 85,000.00</div>
-            </div>
+            <% data.transactions.forEach(function(tx) { %>
+                <div class="transaction-item">
+                    <div class="icon-circle <%= tx.amount > 0 ? 'blue-light' : 'gray-light' %>">
+                        <%= tx.amount > 0 ? '🏢' : '💳' %>
+                    </div>
+                    <div class="tx-details">
+                        <p class="tx-title"><%= tx.merchant %></p>
+                        <p class="tx-subtitle"><%= tx.category %> • <%= tx.date %></p>
+                    </div>
+                    <div class="tx-amount <%= tx.amount > 0 ? 'positive-tx' : '' %>">
+                        <%= tx.amount > 0 ? '+' : '-' %> R <%= Math.abs(tx.amount).toLocaleString('en-ZA', { minimumFractionDigits: 2 }) %>
+                    </div>
+                </div>
+            <% }); %>
           </div>
         </div>
       </section>
