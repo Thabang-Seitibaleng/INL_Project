@@ -30,10 +30,10 @@
         <div class="metric-card card-dark span-2">
           <span class="metric-label">Total Account Value</span>
           <div class="value-row">
-            <span class="ee-massive-value">R 342,500.00</span>
+            <span class="ee-massive-value">R <%= data.totalValue %></span>
           </div>
           <div class="ee-return-pill positive-bg">
-            <span>+ R 14,200.50 (4.32%)</span>
+            <span>+ R 14,200.50 (Live)</span>
           </div>
         </div>
 
@@ -160,6 +160,8 @@
       </section>
 
       <section class="metrics-grid grid-2-1">
+        
+        <!-- CARD 1: YOUR HOLDINGS -->
         <div class="content-card">
           <div class="card-header-flex">
             <h3 class="section-title title-sm">Your Holdings</h3>
@@ -170,125 +172,72 @@
           </div>
 
           <div class="holdings-list">
-            <div class="ee-holding-item">
-              <div class="ee-holding-left">
-                <div class="icon-circle fill-blue ee-icon" style="color: white">
-                  A
+            <% data.holdings.forEach(function(item) { %>
+              <div class="ee-holding-item">
+                <div class="ee-holding-left">
+                  <div class="icon-circle <%= item.isPositive ? 'fill-blue' : '' %> ee-icon" style="<%= item.isPositive ? 'color: white;' : 'background-color: #fef2f2; color: #ef4444;' %>">
+                    <%= item.symbol.charAt(0) %>
+                  </div>
+                  <div>
+                    <p class="tx-title"><%= item.description %> (<%= item.symbol %>)</p>
+                    <p class="tx-subtitle">Via <%= item.provider %></p>
+                  </div>
                 </div>
-                <div>
-                  <p class="tx-title">Apple Inc. (AAPL)</p>
-                  <p class="tx-subtitle">12.4582 Shares @ R 3,145.20</p>
-                </div>
-              </div>
-              <div class="ee-holding-right">
-                <p class="tx-amount">R 39,183.49</p>
-                <p class="tx-subtitle positive">+ R 4,200 (12.4%)</p>
-              </div>
-            </div>
-
-            <div class="ee-holding-item">
-              <div class="ee-holding-left">
-                <div
-                  class="icon-circle ee-icon"
-                  style="background-color: #00a65a; color: white"
-                >
-                  N
-                </div>
-                <div>
-                  <p class="tx-title">Naspers Ltd (NPN)</p>
-                  <p class="tx-subtitle">4.0000 Shares @ R 3,850.00</p>
+                <div class="ee-holding-right">
+                  <p class="tx-amount">R <%= item.value.toLocaleString("en-ZA", { minimumFractionDigits: 2 }) %></p>
+                  <p class="tx-subtitle <%= item.isPositive ? 'positive' : 'negative' %>">
+                    <%= item.isPositive ? 'Market Open' : 'Market Closed' %>
+                  </p>
                 </div>
               </div>
-              <div class="ee-holding-right">
-                <p class="tx-amount">R 15,400.00</p>
-                <p class="tx-subtitle negative">- R 350 (-2.2%)</p>
-              </div>
-            </div>
+            <% }); %>
           </div>
-        </div>
+        </div> <!-- CRITICAL FIX: This closes the Holdings content-card! -->
 
+        <!-- CARD 2: ACCOUNT VAULTS -->
         <div class="content-card">
           <div class="card-header-flex">
             <h3 class="section-title title-sm">Account Vaults</h3>
           </div>
-
           <div class="vault-list">
+            <!-- Investec Vault -->
             <div class="vault-card vault-investec">
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                "
-              >
+              <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span class="vault-brand">INVESTEC</span>
-                <span class="vault-type">Cash Reserve</span>
+                <span class="vault-type">Private Wealth</span>
               </div>
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: flex-end;
-                "
-              >
-                <span class="vault-type" style="margin-bottom: 0"
-                  >Available</span
-                >
-                <span class="vault-balance">R 62,500</span>
+              <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <span class="vault-type" style="margin-bottom: 0">Portfolio</span>
+                <span class="vault-balance">R <%= data.investecBalance %></span>
               </div>
             </div>
 
+            <!-- EasyEquities Vault -->
             <div class="vault-card vault-easy">
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                "
-              >
+              <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span class="vault-brand">EASYEQUITIES</span>
                 <span class="vault-type">ZAR Portfolio</span>
               </div>
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: flex-end;
-                "
-              >
-                <span class="vault-type" style="margin-bottom: 0"
-                  >Invested</span
-                >
-                <span class="vault-balance">R 215,000</span>
+              <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <span class="vault-type" style="margin-bottom: 0">Invested</span>
+                <span class="vault-balance">R <%= data.easyEquitiesBalance %></span>
               </div>
             </div>
 
+            <!-- Luno Vault -->
             <div class="vault-card vault-luno">
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: center;
-                "
-              >
+              <div style="display: flex; justify-content: space-between; align-items: center;">
                 <span class="vault-brand">LUNO</span>
                 <span class="vault-type">Digital Wallet</span>
               </div>
-              <div
-                style="
-                  display: flex;
-                  justify-content: space-between;
-                  align-items: flex-end;
-                "
-              >
-                <span class="vault-type" style="margin-bottom: 0"
-                  >Holdings</span
-                >
-                <span class="vault-balance">R 65,000</span>
+              <div style="display: flex; justify-content: space-between; align-items: flex-end;">
+                <span class="vault-type" style="margin-bottom: 0">Holdings</span>
+                <span class="vault-balance">R <%= data.lunoBalance %></span>
               </div>
             </div>
           </div>
-        </div>
+        </div> <!-- Closes Vaults content-card -->
+
       </section>
     </main>
   </body>

@@ -296,11 +296,131 @@ app.get("/cashflow", (req, res) => {
 });
 
 app.get("/portfolio", (req, res) => {
-  res.render("portfolio");
+  try {
+    const investRaw = fs.readFileSync(
+      path.join(__dirname, "sample_yodlee_investments.json"),
+    );
+    const investData = JSON.parse(investRaw);
+
+    let totalAccountValue = 0;
+    let investecBalance = 0;
+    let easyEquitiesBalance = 0;
+    let lunoBalance = 0;
+    let combinedHoldings = [];
+
+    // Loop through the accounts to calculate totals and extract holdings
+    investData.account.forEach((acc) => {
+      totalAccountValue += acc.balance.amount;
+
+      // Assign vault balances
+      if (acc.providerName === "Investec") investecBalance = acc.balance.amount;
+      if (acc.providerName === "EasyEquities")
+        easyEquitiesBalance = acc.balance.amount;
+      if (acc.providerName === "Luno") lunoBalance = acc.balance.amount;
+
+      // Extract individual stock/crypto holdings
+      if (acc.holdings) {
+        acc.holdings.forEach((holding) => {
+          combinedHoldings.push({
+            provider: acc.providerName,
+            symbol: holding.symbol,
+            description: holding.description,
+            value: holding.value,
+            // Mocking a positive/negative return for UI purposes
+            isPositive: Math.random() > 0.3,
+          });
+        });
+      }
+    });
+
+    // Package the data for EJS
+    const portfolioData = {
+      totalValue: totalAccountValue.toLocaleString("en-ZA", {
+        minimumFractionDigits: 2,
+        maximumFractionDigits: 2,
+      }),
+      investecBalance: investecBalance.toLocaleString("en-ZA", {
+        minimumFractionDigits: 0,
+      }),
+      easyEquitiesBalance: easyEquitiesBalance.toLocaleString("en-ZA", {
+        minimumFractionDigits: 0,
+      }),
+      lunoBalance: lunoBalance.toLocaleString("en-ZA", {
+        minimumFractionDigits: 0,
+      }),
+      holdings: combinedHoldings,
+    };
+
+    res.render("portfolio", { data: portfolioData });
+  } catch (error) {
+    console.error("Error loading portfolio data:", error);
+    res.status(500).send("Error loading portfolio data");
+  }
 });
 
 app.get("/forecaster", (req, res) => {
-  res.render("forecaster");
+  try {
+    // 1. Grab inputs from the URL query, or fall back to defaults
+    const monthlyContribution = parseFloat(req.query.contribution) || 5000;
+    const annualReturn = parseFloat(req.query.returnRate) || 10.5;
+    const years = parseInt(req.query.years) || 10;
+
+    // 2. The Financial Math (Future Value of an Annuity)
+    const monthlyRate = annualReturn / 100 / 12;
+    const totalMonths = years * 12;
+
+    const finalValue =
+      monthlyContribution *
+      ((Math.pow(1 + monthlyRate, totalMonths) - 1) / monthlyRate);
+    const totalInvested = monthlyContribution * totalMonths;
+    const totalInterest = finalValue - totalInvested;
+    const interestPercentage = (totalInterest / finalValue) * 100;
+
+    // 3. Calculate exactly when they hit R 1,000,000
+    const targetMilestone = 1000000;
+    let milestoneText = "Not reached";
+
+    // Logarithmic formula to solve for time (n)
+    const numerator = Math.log(
+      (targetMilestone * monthlyRate) / monthlyContribution + 1,
+    );
+    const denominator = Math.log(1 + monthlyRate);
+    const monthsToMilestone = numerator / denominator;
+
+    if (monthsToMilestone > 0 && monthsToMilestone <= totalMonths) {
+      const yearsToMilestone = (monthsToMilestone / 12).toFixed(1);
+      milestoneText = `Year ${yearsToMilestone}`;
+    } else if (monthsToMilestone > totalMonths) {
+      milestoneText = `> ${years} Yrs`;
+    }
+
+    // 4. Package everything cleanly for EJS
+    const forecastData = {
+      params: {
+        contribution: monthlyContribution,
+        returnRate: annualReturn,
+        years: years,
+      },
+      metrics: {
+        // Formatting with 0 decimal places for a cleaner look on large numbers
+        finalValue: finalValue.toLocaleString("en-ZA", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }),
+        milestoneText: milestoneText,
+        totalInterest: totalInterest.toLocaleString("en-ZA", {
+          minimumFractionDigits: 0,
+          maximumFractionDigits: 0,
+        }),
+        interestPercentage: interestPercentage.toFixed(1),
+      },
+    };
+
+    res.render("forecaster", { data: forecastData });
+  } catch (error) {
+    console.error("Error running forecast:", error);
+    res.status(500).send("Error generating forecast");
+  }
 });
 
 app.get("/atlas", (req, res) => {

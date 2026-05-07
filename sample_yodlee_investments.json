@@ -1,0 +1,61 @@
+{
+  "account": [
+    {
+      "CONTAINER": "investment",
+      "providerAccountId": 998877,
+      "accountName": "INVESTEC PRIVATE WEALTH",
+      "accountType": "PORTFOLIO",
+      "balance": {
+        "currency": "ZAR",
+        "amount": 4842920.0
+      },
+      "providerName": "Investec",
+      "holdings": [
+        {
+          "symbol": "S&P500",
+          "description": "Satrix S&P 500 ETF",
+          "value": 2400000.0
+        },
+        {
+          "symbol": "NDQ",
+          "description": "Sygnia Itrix Nasdaq 100",
+          "value": 2442920.0
+        }
+      ]
+    },
+    {
+      "CONTAINER": "investment",
+      "providerAccountId": 665544,
+      "accountName": "EASYEQUITIES ZAR",
+      "accountType": "BROKERAGE",
+      "balance": {
+        "currency": "ZAR",
+        "amount": 125400.5
+      },
+      "providerName": "EasyEquities",
+      "holdings": [
+        {
+          "symbol": "FSR",
+          "description": "FirstRand Limited",
+          "value": 45000.0
+        },
+        { "symbol": "MTN", "description": "MTN Group Ltd", "value": 80400.5 }
+      ]
+    },
+    {
+      "CONTAINER": "investment",
+      "providerAccountId": 332211,
+      "accountName": "LUNO WALLET",
+      "accountType": "CRYPTO",
+      "balance": {
+        "currency": "ZAR",
+        "amount": 84200.0
+      },
+      "providerName": "Luno",
+      "holdings": [
+        { "symbol": "BTC", "description": "Bitcoin", "value": 60000.0 },
+        { "symbol": "ETH", "description": "Ethereum", "value": 24200.0 }
+      ]
+    }
+  ]
+}
