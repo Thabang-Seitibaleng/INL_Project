@@ -24,3 +24,36 @@
     />
   </div>
 </header>
+
+<!--This script will change the active nav link based on the current URL path.-->
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const currentPath = window.location.pathname;
+    const navLinks = document.querySelectorAll(".nav-link");
+
+    navLinks.forEach((link) => {
+      if (link.getAttribute("href") === currentPath) {
+        link.classList.add("active");
+      } else {
+        link.classList.remove("active");
+      }
+    });
+  });
+</script>
+
+<script>
+  document.addEventListener("DOMContentLoaded", () => {
+    const toggleGroups = document.querySelectorAll(".toggle-pill");
+
+    toggleGroups.forEach((group) => {
+      const buttons = group.querySelectorAll(".pill-btn");
+
+      buttons.forEach((button) => {
+        button.addEventListener("click", () => {
+          buttons.forEach((btn) => btn.classList.remove("active"));
+          button.classList.add("active");
+        });
+      });
+    });
+  });
+</script>
