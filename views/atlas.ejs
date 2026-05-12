@@ -10,169 +10,262 @@
       rel="stylesheet"
     />
   </head>
-</html>
-<body>
-  <%- include('partials/navbar') %>
+  <body>
+    <%- include('partials/navbar') %>
 
-  <main class="dashboard-container">
-    <header class="page-header flex-header">
-      <div>
-        <h2 style="display: flex; align-items: center; gap: 12px">
-          Atlas
-          <span
-            class="badge blue-badge"
-            style="font-size: 12px; transform: translateY(-2px)"
-            >v1.0</span
-          >
-        </h2>
-        <p class="subtitle">
-          Predictive intelligence and wealth optimization engine.
-        </p>
-      </div>
-      <div class="header-actions">
-        <div
-          class="sync-badge"
-          style="background-color: #111827; color: white; border-color: #374151"
-        >
-          <span class="sync-dot" style="color: #10b981">●</span> Neural Core
-          Online
+    <main class="dashboard-container">
+      <header class="page-header flex-header">
+        <div>
+          <h2 style="display: flex; align-items: center; gap: 12px">
+            Atlas
+            <span
+              class="badge blue-badge"
+              style="font-size: 12px; transform: translateY(-2px)"
+              >v1.0</span
+            >
+          </h2>
+          <p class="subtitle">
+            Predictive intelligence and wealth optimization engine.
+          </p>
         </div>
-      </div>
-    </header>
+        <div class="header-actions">
+          <div
+            class="sync-badge"
+            style="
+              background-color: #111827;
+              color: white;
+              border-color: #374151;
+            "
+          >
+            <span class="sync-dot" style="color: #10b981">●</span> Neural Core
+            Online
+          </div>
+        </div>
+      </header>
 
-    <section class="metrics-grid grid-2-1">
-      <div
-        class="content-card chat-container"
-        style="padding: 0; display: flex; flex-direction: column; height: 600px"
-      >
+      <section class="metrics-grid grid-2-1">
         <div
+          class="content-card chat-container"
           style="
-            padding: 24px;
-            border-bottom: 1px solid var(--border-light);
+            padding: 0;
             display: flex;
-            justify-content: space-between;
-            align-items: center;
+            flex-direction: column;
+            height: 600px;
           "
         >
-          <h3 class="section-title title-sm">Active Session</h3>
-          <button class="icon-btn">⟳ Clear Context</button>
-        </div>
+          <div
+            style="
+              padding: 24px;
+              border-bottom: 1px solid var(--border-light);
+              display: flex;
+              justify-content: space-between;
+              align-items: center;
+            "
+          >
+            <h3 class="section-title title-sm">Active Session</h3>
+            <button class="icon-btn">⟳ Clear Context</button>
+          </div>
 
-        <div class="chat-history">
-          <div class="chat-message atlas-msg">
-            <div class="chat-avatar atlas-avatar">A</div>
-            <div class="chat-bubble atlas-bubble">
-              <p>
-                Good afternoon. I've analyzed your recent transaction batch from
-                Investec. I detected a
-                <strong>14% increase in dining expenses</strong> compared to
-                your 30-day moving average.
-              </p>
-              <p style="margin-top: 8px">
-                Would you like me to adjust your upcoming EasyEquities
-                allocation to compensate, or ignore this anomaly?
-              </p>
+          <div class="chat-history">
+            <div class="chat-message atlas-msg">
+              <div class="chat-avatar atlas-avatar">A</div>
+              <div class="chat-bubble atlas-bubble">
+                <p>Good afternoon. All neural systems are online.</p>
+                <p style="margin-top: 8px">
+                  I have loaded your live banking, spending, and portfolio data.
+                  What would you like to analyze today?
+                </p>
+              </div>
             </div>
           </div>
 
-          <div class="chat-message user-msg">
-            <div class="chat-bubble user-bubble">
-              <p>
-                Ignore it for now. But run a projection on what happens if I
-                increase my ZAR portfolio contributions by R1,500 next month.
-              </p>
-            </div>
-          </div>
-
-          <div class="chat-message atlas-msg">
-            <div class="chat-avatar atlas-avatar">A</div>
-            <div class="chat-bubble atlas-bubble typing-indicator">
-              <span></span><span></span><span></span>
-            </div>
+          <div class="chat-input-area">
+            <input
+              type="text"
+              class="chat-input"
+              placeholder="Ask Atlas to analyze your data..."
+            />
+            <button class="chat-send-btn">Send</button>
           </div>
         </div>
 
-        <div class="chat-input-area">
-          <input
-            type="text"
-            class="chat-input"
-            placeholder="Ask Atlas to analyze your data..."
-          />
-          <button class="chat-send-btn">Send</button>
-        </div>
-      </div>
+        <div style="display: flex; flex-direction: column; gap: 24px">
+          <div class="content-card">
+            <h3 class="section-title title-sm mb-16">Active ML Models</h3>
 
-      <div style="display: flex; flex-direction: column; gap: 24px">
-        <div class="content-card">
-          <h3 class="section-title title-sm mb-16">Active ML Models</h3>
-
-          <div class="model-status-item">
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 8px;
-              "
-            >
-              <span class="tx-title">Transaction Classification</span>
-              <span class="text-positive text-sm" style="font-weight: 700"
-                >99.2%</span
-              >
-            </div>
-            <div class="progress-track" style="height: 4px">
-              <div class="progress-fill fill-blue" style="width: 99.2%"></div>
-            </div>
-          </div>
-
-          <div class="model-status-item mt-16">
-            <div
-              style="
-                display: flex;
-                justify-content: space-between;
-                margin-bottom: 8px;
-              "
-            >
-              <span class="tx-title">Anomaly Detection (Isolation Forest)</span>
-              <span class="text-positive text-sm" style="font-weight: 700"
-                >Running</span
-              >
-            </div>
-            <div class="progress-track" style="height: 4px">
+            <div class="model-status-item">
               <div
-                class="progress-fill"
-                style="width: 100%; background-color: #10b981"
-              ></div>
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin-bottom: 8px;
+                "
+              >
+                <span class="tx-title">Transaction Classification</span>
+                <span class="text-positive text-sm" style="font-weight: 700"
+                  >99.2%</span
+                >
+              </div>
+              <div class="progress-track" style="height: 4px">
+                <div class="progress-fill fill-blue" style="width: 99.2%"></div>
+              </div>
+            </div>
+
+            <div class="model-status-item mt-16">
+              <div
+                style="
+                  display: flex;
+                  justify-content: space-between;
+                  margin-bottom: 8px;
+                "
+              >
+                <span class="tx-title"
+                  >Anomaly Detection (Isolation Forest)</span
+                >
+                <span class="text-positive text-sm" style="font-weight: 700"
+                  >Running</span
+                >
+              </div>
+              <div class="progress-track" style="height: 4px">
+                <div
+                  class="progress-fill"
+                  style="width: 100%; background-color: #10b981"
+                ></div>
+              </div>
+            </div>
+          </div>
+
+          <div class="content-card" style="flex: 1">
+            <h3 class="section-title title-sm mb-16">Discovered Insights</h3>
+
+            <div class="insight-card">
+              <span class="insight-icon">💡</span>
+              <div>
+                <p class="tx-title">Optimization Opportunity</p>
+                <p class="tx-subtitle mt-8">
+                  Rebalancing your Luno wallet back to 15% of your total net
+                  worth could reduce portfolio volatility by 3.4% based on
+                  historical data.
+                </p>
+              </div>
+            </div>
+
+            <div class="insight-card mt-16">
+              <span class="insight-icon">⚠️</span>
+              <div>
+                <p class="tx-title">Subscription Creep</p>
+                <p class="tx-subtitle mt-8">
+                  I found 2 unused SaaS subscriptions in your last 90 days of
+                  transactions totaling R 450/mo.
+                </p>
+              </div>
             </div>
           </div>
         </div>
+      </section>
+    </main>
 
-        <div class="content-card" style="flex: 1">
-          <h3 class="section-title title-sm mb-16">Discovered Insights</h3>
+    <script>
+      document.addEventListener("DOMContentLoaded", () => {
+        const chatInput = document.querySelector(".chat-input");
+        const sendBtn = document.querySelector(".chat-send-btn");
+        const chatHistory = document.querySelector(".chat-history");
 
-          <div class="insight-card">
-            <span class="insight-icon">💡</span>
-            <div>
-              <p class="tx-title">Optimization Opportunity</p>
-              <p class="tx-subtitle mt-8">
-                Rebalancing your Luno wallet back to 15% of your total net worth
-                could reduce portfolio volatility by 3.4% based on historical
-                data.
-              </p>
-            </div>
-          </div>
+        // Automatically scroll to the latest message
+        const scrollToBottom = () => {
+          chatHistory.scrollTop = chatHistory.scrollHeight;
+        };
 
-          <div class="insight-card mt-16">
-            <span class="insight-icon">⚠️</span>
-            <div>
-              <p class="tx-title">Subscription Creep</p>
-              <p class="tx-subtitle mt-8">
-                I found 2 unused SaaS subscriptions in your last 90 days of
-                transactions totaling R 450/mo.
-              </p>
-            </div>
-          </div>
-        </div>
-      </div>
-    </section>
-  </main>
-</body>
+        // Helper to generate and append a chat bubble
+        const addMessage = (sender, text) => {
+          const msgDiv = document.createElement("div");
+          msgDiv.classList.add(
+            "chat-message",
+            sender === "user" ? "user-msg" : "atlas-msg",
+          );
+
+          if (sender === "atlas") {
+            msgDiv.innerHTML = `
+              <div class="chat-avatar atlas-avatar">A</div>
+              <div class="chat-bubble atlas-bubble">
+                <p>${text}</p>
+              </div>
+            `;
+          } else {
+            msgDiv.innerHTML = `
+              <div class="chat-bubble user-bubble">
+                <p>${text}</p>
+              </div>
+            `;
+          }
+
+          chatHistory.appendChild(msgDiv);
+          scrollToBottom();
+        };
+
+        // Helper to show/hide the typing dots
+        const toggleTypingIndicator = (show) => {
+          if (show) {
+            const typingDiv = document.createElement("div");
+            typingDiv.classList.add(
+              "chat-message",
+              "atlas-msg",
+              "typing-element",
+            );
+            typingDiv.innerHTML = `
+              <div class="chat-avatar atlas-avatar">A</div>
+              <div class="chat-bubble atlas-bubble typing-indicator">
+                <span></span><span></span><span></span>
+              </div>
+            `;
+            chatHistory.appendChild(typingDiv);
+            scrollToBottom();
+          } else {
+            const typingEl = document.querySelector(".typing-element");
+            if (typingEl) typingEl.remove();
+          }
+        };
+
+        // The Main Engine: Sends data to the Express backend
+        const handleSend = async () => {
+          const message = chatInput.value.trim();
+          if (!message) return;
+
+          // 1. Instantly show what the user typed
+          addMessage("user", message);
+          chatInput.value = "";
+
+          // 2. Show the Atlas typing animation
+          toggleTypingIndicator(true);
+
+          try {
+            // 3. Ping the API endpoint
+            const response = await fetch("/api/atlas/chat", {
+              method: "POST",
+              headers: { "Content-Type": "application/json" },
+              body: JSON.stringify({ message: message }), // Send the text
+            });
+
+            const data = await response.json(); // Wait for the answer
+
+            // 4. Remove typing dots and print the AI's answer
+            toggleTypingIndicator(false);
+            addMessage("atlas", data.reply);
+          } catch (error) {
+            toggleTypingIndicator(false);
+            addMessage(
+              "atlas",
+              "System Error: Unable to connect to backend data pipelines.",
+            );
+          }
+        };
+
+        // Trigger handleSend on Button Click or Enter Key
+        sendBtn.addEventListener("click", handleSend);
+        chatInput.addEventListener("keypress", (e) => {
+          if (e.key === "Enter") handleSend();
+        });
+      });
+    </script>
+  </body>
+</html>

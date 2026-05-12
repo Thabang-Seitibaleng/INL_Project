@@ -2,6 +2,9 @@ const fs = require("fs");
 const path = require("path");
 require("dotenv").config();
 const axios = require("axios"); // Used to call Stitch
+const express = require("express");
+const app = express();
+app.use(express.json());
 
 // Yodlee Authentication Function
 async function getYodleeToken() {
@@ -126,10 +129,6 @@ async function getTransactions(userToken) {
     return null;
   }
 }
-
-const express = require("express");
-const app = express();
-const port = 3000;
 
 app.set("view engine", "ejs");
 
@@ -425,6 +424,94 @@ app.get("/forecaster", (req, res) => {
 
 app.get("/atlas", (req, res) => {
   res.render("atlas");
+});
+
+// 2. The Dynamic Atlas "Brain" API
+app.post("/api/atlas/chat", (req, res) => {
+  try {
+    const userMessage = req.body.message.toLowerCase();
+    let aiResponse =
+      "I'm still learning! Try asking me about your **balance**, your **spending**, or your **portfolio**.";
+
+    // 1. Load the live data from our JSON files
+    const accountsData = JSON.parse(
+      fs.readFileSync(
+        path.join(__dirname, "sample_yodlee_data.json"),
+      ),
+    );
+    const txData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "sample_yodlee_transactions.json")),
+    );
+    const investData = JSON.parse(
+      fs.readFileSync(path.join(__dirname, "sample_yodlee_investments.json")),
+    );
+
+    // 2. Dynamic Routing Logic
+
+    // SCENARIO A: User asks about their balance or cash
+    if (
+      userMessage.includes("balance") ||
+      userMessage.includes("cash") ||
+      userMessage.includes("money")
+    ) {
+      const checking = accountsData.account.find(
+        (acc) => acc.accountType === "CHECKING",
+      );
+      const savings = accountsData.account.find(
+        (acc) => acc.accountType === "SAVINGS",
+      );
+
+      if (checking && savings) {
+        aiResponse = `Your everyday checking account currently has **R ${checking.balance.amount.toLocaleString("en-ZA")}**. You also have **R ${savings.balance.amount.toLocaleString("en-ZA")}** sitting in your Wealth Savings. You are looking very healthy!`;
+      }
+
+      // SCENARIO B: User asks about spending or expenses
+    } else if (
+      userMessage.includes("spend") ||
+      userMessage.includes("expense") ||
+      userMessage.includes("outflow")
+    ) {
+      let totalSpent = 0;
+      let largestExpense = { amount: 0, merchant: "" };
+
+      // Loop through transactions to calculate actual spending
+      txData.transaction.forEach((tx) => {
+        if (tx.amount.amount < 0) {
+          const spent = Math.abs(tx.amount.amount);
+          totalSpent += spent;
+          if (spent > largestExpense.amount) {
+            largestExpense = { amount: spent, merchant: tx.description.simple };
+          }
+        }
+      });
+
+      aiResponse = `You have spent **R ${totalSpent.toLocaleString("en-ZA")}** so far. Your largest single expense was **R ${largestExpense.amount.toLocaleString("en-ZA")}** at ${largestExpense.merchant}.`;
+
+      // SCENARIO C: User asks about investments or crypto
+    } else if (
+      userMessage.includes("portfolio") ||
+      userMessage.includes("crypto") ||
+      userMessage.includes("invest")
+    ) {
+      const luno = investData.account.find(
+        (acc) => acc.providerName === "Luno",
+      );
+
+      if (luno) {
+        // Find Bitcoin dynamically
+        const btc = luno.holdings.find((h) => h.symbol === "BTC");
+        aiResponse = `Your total Luno crypto wallet is sitting at **R ${luno.balance.amount.toLocaleString("en-ZA")}**. Your largest driver is ${btc.description}, currently valued at **R ${btc.value.toLocaleString("en-ZA")}**.`;
+      }
+    }
+
+    // 3. Send the dynamically generated response back to the chat interface
+    res.json({ reply: aiResponse });
+  } catch (error) {
+    console.error("Atlas Error:", error);
+    res.status(500).json({
+      reply: "I'm having trouble connecting to my data arrays right now.",
+    });
+  }
 });
 
 app.get("/api/accounts", (req, res) => {
