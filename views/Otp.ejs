@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>Architect | Verify OTP</title>
+    <link rel="stylesheet" href="/style.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700;800&display=swap"
+      rel="stylesheet"
+    />
+    <style>
+      .auth-wrapper {
+        min-height: 100vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background-color: var(--bg-main, #f9fafb);
+        padding: 24px;
+      }
+      .auth-card {
+        background: #ffffff;
+        border: 1px solid #e5e7eb;
+        border-radius: 16px;
+        padding: 48px 40px;
+        width: 100%;
+        max-width: 400px;
+        box-shadow: 0 4px 24px rgba(0, 0, 0, 0.06);
+        text-align: center;
+      }
+      .otp-icon {
+        font-size: 40px;
+        margin-bottom: 20px;
+      }
+      .auth-heading {
+        font-size: 22px;
+        font-weight: 700;
+        color: #111827;
+        margin-bottom: 8px;
+        letter-spacing: -0.4px;
+      }
+      .auth-subheading {
+        font-size: 14px;
+        color: #6b7280;
+        margin-bottom: 32px;
+        line-height: 1.5;
+      }
+      .auth-error {
+        background: #fef2f2;
+        border: 1px solid #fecaca;
+        border-radius: 8px;
+        padding: 12px 14px;
+        font-size: 13px;
+        color: #dc2626;
+        margin-bottom: 20px;
+        text-align: left;
+      }
+      .auth-input {
+        width: 100%;
+        padding: 14px;
+        border: 1px solid #d1d5db;
+        border-radius: 8px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #111827;
+        text-align: center;
+        letter-spacing: 8px;
+        background: #ffffff;
+        transition: border-color 0.15s, box-shadow 0.15s;
+        box-sizing: border-box;
+        font-family: "Inter", sans-serif;
+        margin-bottom: 16px;
+      }
+      .auth-input:focus {
+        outline: none;
+        border-color: #111827;
+        box-shadow: 0 0 0 3px rgba(17, 24, 39, 0.08);
+      }
+      .auth-btn {
+        width: 100%;
+        padding: 12px;
+        background: #111827;
+        color: white;
+        border: none;
+        border-radius: 8px;
+        font-size: 14px;
+        font-weight: 600;
+        cursor: pointer;
+        transition: background 0.15s;
+        font-family: "Inter", sans-serif;
+      }
+      .auth-btn:hover { background: #1f2937; }
+      .back-link {
+        display: block;
+        margin-top: 20px;
+        font-size: 13px;
+        color: #6b7280;
+        text-decoration: none;
+      }
+      .back-link:hover { color: #111827; }
+    </style>
+  </head>
+  <body>
+    <div class="auth-wrapper">
+      <div class="auth-card">
+        <div class="otp-icon">🔐</div>
+        <h1 class="auth-heading">Two-Factor Verification</h1>
+        <p class="auth-subheading">
+          Enter the 6-digit code sent to your phone or email to continue.
+        </p>
+
+        <% if (typeof error !== 'undefined' && error) { %>
+          <div class="auth-error">⚠️ <%= error %></div>
+        <% } %>
+
+        <form method="POST" action="/auth/verify-otp">
+          <!-- Pass userId through as a hidden field -->
+          <input type="hidden" name="userId" value="<%= userId %>" />
+
+          <input
+            type="text"
+            name="otp"
+            class="auth-input"
+            placeholder="000000"
+            maxlength="6"
+            inputmode="numeric"
+            pattern="[0-9]{6}"
+            autocomplete="one-time-code"
+            autofocus
+            required
+          />
+
+          <button type="submit" class="auth-btn">Verify &amp; Sign In</button>
+        </form>
+
+        <a href="/login" class="back-link">← Back to login</a>
+      </div>
+    </div>
+  </body>
+</html>
