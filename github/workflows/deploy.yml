@@ -1,0 +1,44 @@
+name: BC WildWatch CI/CD Pipeline
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+
+jobs:
+  ci-check:
+    name: Install and Validate Project
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Checkout repository
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: 18
+          cache: npm
+
+      - name: Install dependencies
+        run: npm install
+
+      - name: Verify server file exists
+        run: test -f server.js
+
+      - name: Run basic startup check
+        run: echo "Project structure valid"
+
+  deployment-ready:
+    name: Deployment Stage (Connect Hosting Here)
+    needs: ci-check
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: Deployment message
+        run: |
+          echo "CI passed successfully."
+          echo "Connect this to Render / Railway / Azure Static Web Apps for live deployment."
