@@ -1,4 +1,4 @@
-name: BC WildWatch CI/CD Pipeline
+name: Architect Wealth Suite CI/CD Pipeline
 
 on:
   push:
