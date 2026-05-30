@@ -23,9 +23,11 @@ const {
   Account,
   Transaction,
   Holding,
-  AtlasSession,
-} = require("../models");
  
+} = require("../models");
+
+ const AtlasSession = require("../models/Atlas");
+
 const anthropic = new Anthropic({
   apiKey: process.env.ANTHROPIC_API_KEY,
 });

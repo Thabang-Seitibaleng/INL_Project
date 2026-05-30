@@ -77,7 +77,7 @@ exports.getPortfolio = async (req, res) => {
     const twelveMonthsAgo = new Date();
     twelveMonthsAgo.setFullYear(twelveMonthsAgo.getFullYear() - 1);
  
-    const snapshots = await PortfolioSnapshot.find({
+    const snapshots = await PortfolioSnapshotSchema.find({
       userId,
       takenAt: { $gte: twelveMonthsAgo },
     })
