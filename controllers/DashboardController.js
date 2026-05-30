@@ -122,7 +122,7 @@ exports.getDashboard = async (req, res) => {
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
  
-    const transactions = await Transaction.find({
+    const transactions = await TransactionSchema.find({
       userId,
       date:   { $gte: thirtyDaysAgo },
       status: "POSTED",

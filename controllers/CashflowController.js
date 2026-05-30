@@ -56,7 +56,7 @@ const cashFlowController = {
       const endDate = new Date(year, month, 0, 23, 59, 59); // last day of month
 
       // ── Transactions ─────────────────────────────────────────────────────────
-      const transactions = await Transaction.find({
+      const transactions = await TransactionSchema.find({
         userId,
         date: { $gte: startDate, $lte: endDate },
         status: "POSTED",
@@ -83,7 +83,7 @@ const cashFlowController = {
 
       // ── Budget Utilization ────────────────────────────────────────────────────
       // Fetch all budget categories for this user/month
-      const budgets = await BudgetCategory.find({ userId, month, year }).lean();
+      const budgets = await BudgetCategorySchema.find({ userId, month, year }).lean();
 
       // For each budget, sum actual spending from matching transaction categories
       const budgetUtilization = budgets.map((budget) => {
@@ -152,7 +152,7 @@ const cashFlowController = {
       const autoCategory = autoAssignCategory(merchantName);
       const finalCategory = category || autoCategory; // user override takes precedence
 
-      const transaction = await Transaction.create({
+      const transaction = await TransactionSchema.create({
         userId,
         accountId,
         description: {
