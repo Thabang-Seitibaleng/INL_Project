@@ -22,6 +22,9 @@ const {
   PortfolioSnapshotSchema,
 } = require("../models/index");
  
+
+const dummyAccounts = require("../sample_yodlee_data.json").account;
+const dummyTransactions = require("../sample_yodlee_transactions.json").transaction;
 // ─── Helpers ────────────────────────────────────────────────────────────────
  
 /**
@@ -37,27 +40,22 @@ const computeHealthScore = (accounts, netCashflow, monthlyExpenses) => {
   let score = 800;
   let trend = "↑ +12 points this week";
  
-  const creditCard = accounts.find((a) => a.accountType === "CREDIT_CARD");
+  const creditCard = accounts.find(
+    (a) => a.CONTAINER === "creditCard" || a.accountType === "CREDIT_CARD"
+  );
  
   if (creditCard && creditCard.totalCreditLine?.amount > 0) {
     const utilization = creditCard.balance.amount / creditCard.totalCreditLine.amount;
-    if (utilization > 0.7) {
-      score = 620;
-      trend = "↓ Very high credit utilization";
-    } else if (utilization > 0.5) {
-      score = 680;
-      trend = "↓ High credit utilization";
-    } else if (utilization > 0.3) {
-      score = 750;
-      trend = "→ Moderate credit utilization";
-    }
+    if      (utilization > 0.7) { score = 620; trend = "↓ Very high credit utilization"; }
+    else if (utilization > 0.5) { score = 680; trend = "↓ High credit utilization"; }
+    else if (utilization > 0.3) { score = 750; trend = "→ Moderate credit utilization"; }
   }
  
-  // Bonus: positive cashflow
   if (netCashflow > 0) score = Math.min(1000, score + 30);
  
-  // Bonus: emergency fund (savings account covers 3 months of expenses)
-  const savings = accounts.find((a) => a.accountType === "SAVINGS");
+  const savings = accounts.find(
+    (a) => a.accountType === "SAVINGS" || a.accountName?.includes("SAVINGS")
+  );
   if (savings && monthlyExpenses > 0 && savings.balance.amount >= monthlyExpenses * 3) {
     score = Math.min(1000, score + 50);
     trend = "↑ Strong emergency fund detected";
@@ -66,10 +64,6 @@ const computeHealthScore = (accounts, netCashflow, monthlyExpenses) => {
   return { score, trend };
 };
  
-/**
- * Builds 4-week spending buckets from a transaction array.
- * Powers the "Monthly Spending Trend" bar chart in dashboard.ejs.
- */
 const buildWeeklyTrend = (transactions) => {
   const weeks = [
     { label: "WK 1", inflow: 0, outflow: 0 },
@@ -80,45 +74,104 @@ const buildWeeklyTrend = (transactions) => {
  
   const now = new Date();
   transactions.forEach((tx) => {
-    const daysAgo = Math.floor((now - new Date(tx.date)) / (1000 * 60 * 60 * 24));
+    // Support both MongoDB shape ({ amount: { amount } }) and flat JSON shape
+    const amount = tx.amount?.amount ?? tx.amount ?? 0;
+    const date   = tx.date ? new Date(tx.date) : now;
+ 
+    const daysAgo   = Math.floor((now - date) / (1000 * 60 * 60 * 24));
     const weekIndex = Math.min(3, Math.floor(daysAgo / 7));
-    const slot = weeks[3 - weekIndex]; // most recent = WK 4
-    if (tx.amount.amount > 0) slot.inflow  += tx.amount.amount;
-    else                       slot.outflow += Math.abs(tx.amount.amount);
+    const slot      = weeks[3 - weekIndex];
+ 
+    if (amount > 0) slot.inflow  += amount;
+    else            slot.outflow += Math.abs(amount);
   });
  
   return weeks;
 };
  
-// ─── Controller ─────────────────────────────────────────────────────────────
+// ─── Dummy data builder ───────────────────────────────────────────────────────
+// Derives all values directly from the JSON files — nothing hardcoded.
  
-/**
- * GET /
- * Renders dashboard.ejs with live MongoDB data.
- * req.user is injected by the auth middleware.
- */
+const buildDummyViewData = (firstName) => {
+  // Net worth from sample_yodlee_data.json
+  let totalBalance = 0;
+  let safeToSpend  = 0;
+ 
+  dummyAccounts.forEach((acc) => {
+    const amount = acc.balance?.amount ?? 0;
+    if (acc.isAsset) totalBalance += amount;
+    else             totalBalance -= amount;
+ 
+    if (acc.accountType === "CHECKING" || acc.accountName?.includes("CHECKING")) {
+      safeToSpend = amount;
+    }
+  });
+ 
+  // Income / expenses from sample_yodlee_transactions.json
+  let monthlyIncome   = 0;
+  let monthlyExpenses = 0;
+ 
+  dummyTransactions.forEach((tx) => {
+    const amount = tx.amount?.amount ?? 0;
+    if (amount > 0) monthlyIncome   += amount;
+    else            monthlyExpenses += Math.abs(amount);
+  });
+ 
+  const netCashflow = monthlyIncome - monthlyExpenses;
+ 
+  const { score: healthScore, trend: healthTrend } =
+    computeHealthScore(dummyAccounts, netCashflow, monthlyExpenses);
+ 
+  // Recent activity — map JSON transaction shape to the shape dashboard.ejs expects
+  const transactions = dummyTransactions.slice(0, 10).map((tx) => ({
+    merchant: tx.description?.simple ?? "Unknown",
+    category: tx.category            ?? "Uncategorized",
+    date:     new Date(tx.date).toLocaleDateString("en-ZA"),
+    amount:   tx.amount?.amount      ?? 0,
+  }));
+ 
+  const weeklyTrend = buildWeeklyTrend(dummyTransactions);
+ 
+  return {
+    firstName,
+    healthScore,
+    healthTrend,
+    totalBalance:  totalBalance.toLocaleString("en-ZA",  { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    monthlyIncome: monthlyIncome.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    incomeTrend:   "⏱ Next deposit in 4 days",
+    safeToSpend:   safeToSpend.toLocaleString("en-ZA",   { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    spendLimit:    "Based on checking balance",
+    transactions,
+    weeklyTrend,
+  };
+};
+ 
+// ─── Controller ───────────────────────────────────────────────────────────────
+ 
 exports.getDashboard = async (req, res) => {
   try {
     const userId = req.user.id;
  
-    // ── 1. User ──────────────────────────────────────────────────────────────
     const user = await User.findById(userId).lean();
     if (!user) return res.status(404).send("User not found.");
  
-    // ── 2. Accounts ──────────────────────────────────────────────────────────
     const accounts = await Account.find({ userId, isActive: true }).lean();
  
-    // Net worth: sum assets, subtract liabilities (mirrors original server.js logic)
+    // ── Dummy fallback ─────────────────────────────────────────────────────────
+    if (!accounts || accounts.length === 0) {
+      console.log("[Dashboard] No accounts in DB — serving dummy JSON data.");
+      return res.render("dashboard", { data: buildDummyViewData(user.firstName) });
+    }
+ 
+    // ── Live path ──────────────────────────────────────────────────────────────
     let totalBalance = 0;
     accounts.forEach((acc) => {
       totalBalance += acc.isAsset ? acc.balance.amount : -acc.balance.amount;
     });
  
-    // Safe to Spend = checking account balance
-    const checking = accounts.find((a) => a.accountType === "CHECKING");
+    const checking    = accounts.find((a) => a.accountType === "CHECKING");
     const safeToSpend = checking ? checking.balance.amount : 0;
  
-    // ── 3. Transactions (last 30 days) ───────────────────────────────────────
     const thirtyDaysAgo = new Date();
     thirtyDaysAgo.setDate(thirtyDaysAgo.getDate() - 30);
  
@@ -130,8 +183,7 @@ exports.getDashboard = async (req, res) => {
       .sort({ date: -1 })
       .lean();
  
-    // Monthly income = sum of all CREDIT transactions
-    let monthlyIncome  = 0;
+    let monthlyIncome   = 0;
     let monthlyExpenses = 0;
     transactions.forEach((tx) => {
       if (tx.amount.amount > 0) monthlyIncome   += tx.amount.amount;
@@ -140,14 +192,11 @@ exports.getDashboard = async (req, res) => {
  
     const netCashflow = monthlyIncome - monthlyExpenses;
  
-    // ── 4. Health Score ──────────────────────────────────────────────────────
     const { score: healthScore, trend: healthTrend } =
       computeHealthScore(accounts, netCashflow, monthlyExpenses);
  
-    // Persist updated health score on the user document (background update)
     User.findByIdAndUpdate(userId, { healthScore, healthTrend }).exec();
  
-    // ── 5. Recent Activity (last 10) ─────────────────────────────────────────
     const recentTransactions = transactions.slice(0, 10).map((tx) => ({
       merchant: tx.description.simple,
       category: tx.category,
@@ -155,37 +204,22 @@ exports.getDashboard = async (req, res) => {
       amount:   tx.amount.amount,
     }));
  
-    // ── 6. Weekly Trend ──────────────────────────────────────────────────────
     const weeklyTrend = buildWeeklyTrend(transactions);
  
-    // ── 7. Assemble view data (matches exact shape expected by dashboard.ejs) ─
-    const viewData = {
-      firstName: user.firstName,
-      healthScore,
-      healthTrend,
- 
-      totalBalance: totalBalance.toLocaleString("en-ZA", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
- 
-      monthlyIncome: monthlyIncome.toLocaleString("en-ZA", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
-      incomeTrend: "⏱ Next deposit in 4 days", // TODO: derive from payroll schedule
- 
-      safeToSpend: safeToSpend.toLocaleString("en-ZA", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
-      spendLimit: "Based on checking balance",
- 
-      transactions: recentTransactions,
-      weeklyTrend,
-    };
- 
-    return res.render("dashboard", { data: viewData });
+    return res.render("dashboard", {
+      data: {
+        firstName:     user.firstName,
+        healthScore,
+        healthTrend,
+        totalBalance:  totalBalance.toLocaleString("en-ZA",  { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        monthlyIncome: monthlyIncome.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        incomeTrend:   "⏱ Next deposit in 4 days",
+        safeToSpend:   safeToSpend.toLocaleString("en-ZA",   { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        spendLimit:    "Based on checking balance",
+        transactions:  recentTransactions,
+        weeklyTrend,
+      },
+    });
   } catch (err) {
     console.error("[dashboardController.getDashboard]", err);
     return res.status(500).send("Error loading dashboard data.");
