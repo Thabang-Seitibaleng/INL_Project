@@ -11,11 +11,75 @@
  *   - Top Movers (7-day return data)
  *   - Performance History chart (via PortfolioSnapshot)
  */
- 
+
 const { Account, Holding, PortfolioSnapshotSchema } = require("../models/index");
- 
+
+//dummy data 
+const dummyInvestments = require("../sample_yodlee_investments.json").account;
+
+//Dummy data builder
+//derives all values directly from samples_yodlee_investments
+const buildDummyPortfolioData = () => {
+  let totalAccountValue = 0;
+  let investecBalance = 0;
+  let easyEquitiesBalance = 0;
+  let lunoBalance = 0;
+  const mappedHoldings = [];
+
+  dummyInvestments.forEach((acc) => {
+    const amount = acc.balance?.amount ?? 0;
+    totalAccountValue += amount;
+
+    if (acc.providerName === "Investec") investecBalance = amount;
+    if (acc.providerName === "EasyEquities") easyEquitiesBalance = amount;
+    if (acc.providerName === "Luno") lunoBalance = amount;
+
+    // Flatten holdings from each account into the shape portfolio.ejs expects
+    (acc.holdings || []).forEach((h) => {
+      mappedHoldings.push({
+        provider: acc.providerName,
+        symbol: h.symbol,
+        description: h.description,
+        value: h.value,
+        assetClass: acc.accountType === "CRYPTO" ? "Crypto" : "Equity",
+        // returnPercentage / returnAmount not in JSON — default to 0 until live data arrives
+        returnPercentage: h.returnPercentage ?? 0,
+        returnAmount: h.returnAmount ?? 0,
+        isPositive: (h.returnPercentage ?? 0) >= 0,
+      });
+    });
+  });
+
+  // Top movers sorted by absolute return percentage
+  const topMovers = [...mappedHoldings]
+    .sort((a, b) => Math.abs(b.returnPercentage) - Math.abs(a.returnPercentage))
+    .slice(0, 5);
+
+  // Performance history: derive 6-month curve from the total value in the JSON
+  const performanceHistory = [];
+  const startValue = totalAccountValue * 0.82; // assume ~18% growth over 6 months
+  for (let i = 5; i >= 0; i--) {
+    const d = new Date();
+    d.setMonth(d.getMonth() - i);
+    performanceHistory.push({
+      date: d,
+      totalValue: Math.round(startValue + (totalAccountValue - startValue) * ((5 - i) / 5)),
+    });
+  }
+
+  return {
+    totalValue: totalAccountValue.toLocaleString("en-ZA", { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+    investecBalance: investecBalance.toLocaleString("en-ZA", { minimumFractionDigits: 0 }),
+    easyEquitiesBalance: easyEquitiesBalance.toLocaleString("en-ZA", { minimumFractionDigits: 0 }),
+    lunoBalance: lunoBalance.toLocaleString("en-ZA", { minimumFractionDigits: 0 }),
+    holdings: mappedHoldings,
+    topMovers,
+    performanceHistory,
+  };
+};
+
 // ─── GET /portfolio ───────────────────────────────────────────────────────────
- 
+
 /**
  * Renders portfolio.ejs with live MongoDB data.
  * Mirrors the exact data shape expected by the EJS template.
@@ -23,58 +87,60 @@ const { Account, Holding, PortfolioSnapshotSchema } = require("../models/index")
 exports.getPortfolio = async (req, res) => {
   try {
     const userId = req.user.id;
- 
+
     // ── Accounts (vaults) ─────────────────────────────────────────────────────
     const accounts = await Account.find({ userId, isActive: true }).lean();
- 
-    let totalAccountValue  = 0;
-    let investecBalance    = 0;
+
+    let totalAccountValue = 0;
+    let investecBalance = 0;
     let easyEquitiesBalance = 0;
-    let lunoBalance        = 0;
- 
+    let lunoBalance = 0;
+
     accounts.forEach((acc) => {
       totalAccountValue += acc.balance.amount;
-      if (acc.providerName === "Investec")     investecBalance     = acc.balance.amount;
+      if (acc.providerName === "Investec") investecBalance = acc.balance.amount;
       if (acc.providerName === "EasyEquities") easyEquitiesBalance = acc.balance.amount;
-      if (acc.providerName === "Luno")         lunoBalance         = acc.balance.amount;
+      if (acc.providerName === "Luno") lunoBalance = acc.balance.amount;
     });
- 
+
     // ── Holdings ──────────────────────────────────────────────────────────────
     const holdings = await Holding.find({ userId })
       .sort({ value: -1 }) // highest value first
       .lean();
- 
-    // Map to shape expected by portfolio.ejs Your Holdings section
-    const mappedHoldings = holdings.map((h) => ({
-      provider:    h.accountId?.toString() || "Unknown", // will be populated below
-      symbol:      h.symbol,
-      description: h.description,
-      value:       h.value,
-      isPositive:  h.isPositive,
-    }));
- 
+
+
     // Populate provider name by joining with Account (efficient: accounts already in memory)
     const accountMap = Object.fromEntries(accounts.map((a) => [a._id.toString(), a.providerName]));
-    holdings.forEach((h, i) => {
-      mappedHoldings[i].provider = accountMap[h.accountId?.toString()] || "Unknown";
-    });
- 
+    // Map to shape expected by portfolio.ejs Your Holdings section
+    const mappedHoldings = holdings.map((h) => ({
+      provider: accountMap[h.accountId?.toString()] || "Unknown",
+      symbol: h.symbol,
+      description: h.description,
+      value: h.value,
+      isPositive: h.isPositive,
+      returnPercentage: h.returnPercentage,
+      returnAmount: h.returnAmount,
+      assetClass: h.assetClass,
+    }));
+
+
+
     // ── Top Movers (7-day) ────────────────────────────────────────────────────
     const topMovers = [...holdings]
       .sort((a, b) => Math.abs(b.returnPercentage) - Math.abs(a.returnPercentage))
       .slice(0, 5)
       .map((h) => ({
-        symbol:           h.symbol,
-        description:      h.description,
-        assetClass:       h.assetClass,
-        value:            h.value,
+        symbol: h.symbol,
+        description: h.description,
+        assetClass: h.assetClass,
+        value: h.value,
         returnPercentage: h.returnPercentage,
-        returnAmount:     h.returnAmount,
-        isPositive:       h.isPositive,
+        returnAmount: h.returnAmount,
+        isPositive: h.isPositive,
       }));
- 
+
     // ── Performance History (last 12 months for chart) ────────────────────────
-    const twelveMonthsAgo = new Date();
+     const twelveMonthsAgo = new Date();
     twelveMonthsAgo.setFullYear(twelveMonthsAgo.getFullYear() - 1);
  
     const snapshots = await PortfolioSnapshotSchema.find({
@@ -88,30 +154,27 @@ exports.getPortfolio = async (req, res) => {
       date:       s.takenAt,
       totalValue: s.totalValue,
     }));
- 
-    // ── Assemble view data ────────────────────────────────────────────────────
-    const portfolioData = {
-      totalValue: totalAccountValue.toLocaleString("en-ZA", {
-        minimumFractionDigits: 2,
-        maximumFractionDigits: 2,
-      }),
-      investecBalance: investecBalance.toLocaleString("en-ZA", { minimumFractionDigits: 0 }),
-      easyEquitiesBalance: easyEquitiesBalance.toLocaleString("en-ZA", { minimumFractionDigits: 0 }),
-      lunoBalance: lunoBalance.toLocaleString("en-ZA", { minimumFractionDigits: 0 }),
-      holdings:    mappedHoldings,
-      topMovers,
-      performanceHistory,
-    };
- 
-    return res.render("portfolio", { data: portfolioData });
+
+        return res.render("portfolio", {
+      data: {
+        totalValue:          totalAccountValue.toLocaleString("en-ZA",   { minimumFractionDigits: 2, maximumFractionDigits: 2 }),
+        investecBalance:     investecBalance.toLocaleString("en-ZA",     { minimumFractionDigits: 0 }),
+        easyEquitiesBalance: easyEquitiesBalance.toLocaleString("en-ZA", { minimumFractionDigits: 0 }),
+        lunoBalance:         lunoBalance.toLocaleString("en-ZA",         { minimumFractionDigits: 0 }),
+        holdings:            mappedHoldings,
+        topMovers,
+        performanceHistory,
+      },
+    });
   } catch (err) {
     console.error("[portfolioController.getPortfolio]", err);
     return res.status(500).send("Error loading portfolio data.");
   }
 };
- 
+
+
 // ─── Account (Vault) CRUD ─────────────────────────────────────────────────────
- 
+
 /**
  * GET /api/accounts
  * Returns all active accounts for the authenticated user.
@@ -126,40 +189,17 @@ exports.getAccounts = async (req, res) => {
   }
 };
  
-/**
- * POST /api/accounts
- * Adds a new account vault (bank account, investment account, crypto wallet).
- *
- * Body: { providerName, accountType, accountName, balance, currency?, isAsset?, accountNumber? }
- */
 exports.createAccount = async (req, res) => {
   try {
     const userId = req.user.id;
-    const {
-      providerName,
-      accountType,
-      accountName,
-      container,
-      balance,
-      currency,
-      isAsset,
-      accountNumber,
-      totalCreditLine,
-    } = req.body;
+    const { providerName, accountType, accountName, container, balance, currency, isAsset, accountNumber, totalCreditLine } = req.body;
  
     if (!providerName || !accountType || !accountName || balance === undefined) {
-      return res.status(400).json({
-        error: "providerName, accountType, accountName, and balance are required.",
-      });
+      return res.status(400).json({ error: "providerName, accountType, accountName, and balance are required." });
     }
  
     const account = await Account.create({
-      userId,
-      providerName,
-      accountType,
-      accountName,
-      container,
-      accountNumber,
+      userId, providerName, accountType, accountName, container, accountNumber,
       currency: currency || "ZAR",
       balance:  { amount: parseFloat(balance), currency: currency || "ZAR" },
       totalCreditLine: totalCreditLine
@@ -175,33 +215,21 @@ exports.createAccount = async (req, res) => {
   }
 };
  
-/**
- * PATCH /api/accounts/:id/balance
- * Updates an account's balance (called after syncing with Yodlee/Open Banking).
- *
- * Body: { amount }
- */
 exports.updateAccountBalance = async (req, res) => {
   try {
-    const { id }   = req.params;
-    const userId   = req.user.id;
+    const { id }     = req.params;
     const { amount } = req.body;
+    const userId     = req.user.id;
  
-    if (amount === undefined) {
-      return res.status(400).json({ error: "amount is required." });
-    }
+    if (amount === undefined) return res.status(400).json({ error: "amount is required." });
  
     const account = await Account.findOneAndUpdate(
       { _id: id, userId },
-      {
-        "balance.amount": parseFloat(amount),
-        lastSyncedAt:     new Date(),
-      },
+      { "balance.amount": parseFloat(amount), lastSyncedAt: new Date() },
       { new: true }
     );
  
     if (!account) return res.status(404).json({ error: "Account not found." });
- 
     return res.status(200).json({ message: "Balance updated.", account });
   } catch (err) {
     console.error("[portfolioController.updateAccountBalance]", err);
@@ -209,10 +237,6 @@ exports.updateAccountBalance = async (req, res) => {
   }
 };
  
-/**
- * DELETE /api/accounts/:id
- * Soft-deletes an account (sets isActive = false).
- */
 exports.deleteAccount = async (req, res) => {
   try {
     const { id } = req.params;
@@ -225,7 +249,6 @@ exports.deleteAccount = async (req, res) => {
     );
  
     if (!account) return res.status(404).json({ error: "Account not found." });
- 
     return res.status(200).json({ message: "Account removed." });
   } catch (err) {
     console.error("[portfolioController.deleteAccount]", err);
@@ -235,12 +258,6 @@ exports.deleteAccount = async (req, res) => {
  
 // ─── Holdings CRUD ────────────────────────────────────────────────────────────
  
-/**
- * GET /api/holdings
- * Returns all holdings for the authenticated user, optionally filtered by assetClass.
- *
- * Query: assetClass (Equity | Crypto | ETF | Bond | Cash | Other)
- */
 exports.getHoldings = async (req, res) => {
   try {
     const userId = req.user.id;
@@ -255,25 +272,14 @@ exports.getHoldings = async (req, res) => {
   }
 };
  
-/**
- * POST /api/holdings
- * Upserts a holding (called by the Yodlee sync job).
- *
- * Body: { accountId, symbol, description, assetClass, quantity, value, costBasis?, returnAmount?, returnPercentage? }
- */
 exports.upsertHolding = async (req, res) => {
   try {
     const userId = req.user.id;
-    const {
-      accountId, symbol, description, assetClass,
-      quantity, value, costBasis, returnAmount, returnPercentage,
-    } = req.body;
+    const { accountId, symbol, description, assetClass, quantity, value, costBasis, returnAmount, returnPercentage } = req.body;
  
     if (!accountId || !symbol || !description || value === undefined) {
       return res.status(400).json({ error: "accountId, symbol, description, and value are required." });
     }
- 
-    const isPositive = (returnPercentage || 0) >= 0;
  
     const holding = await Holding.findOneAndUpdate(
       { userId, accountId, symbol },
@@ -285,7 +291,7 @@ exports.upsertHolding = async (req, res) => {
         costBasis:        costBasis !== undefined ? parseFloat(costBasis) : null,
         returnAmount:     parseFloat(returnAmount) || 0,
         returnPercentage: parseFloat(returnPercentage) || 0,
-        isPositive,
+        isPositive:       (returnPercentage || 0) >= 0,
         lastSyncedAt:     new Date(),
       },
       { upsert: true, new: true }
@@ -298,16 +304,9 @@ exports.upsertHolding = async (req, res) => {
   }
 };
  
-// ─── Portfolio Snapshot ───────────────────────────────────────────────────────
- 
-/**
- * POST /api/portfolio/snapshot
- * Records the current total portfolio value as a time-series point.
- * Called by a daily cron job — not typically triggered by the user.
- */
 exports.takeSnapshot = async (req, res) => {
   try {
-    const userId  = req.user.id;
+    const userId   = req.user.id;
     const accounts = await Account.find({ userId, isActive: true }).lean();
  
     let totalValue = 0;
@@ -318,8 +317,7 @@ exports.takeSnapshot = async (req, res) => {
       breakdown.push({ providerName: acc.providerName, balance: acc.balance.amount });
     });
  
-    const snapshot = await PortfolioSnapshot.create({ userId, totalValue, breakdown });
- 
+    const snapshot = await PortfolioSnapshotSchema.create({ userId, totalValue, breakdown });
     return res.status(201).json({ message: "Snapshot saved.", snapshot });
   } catch (err) {
     console.error("[portfolioController.takeSnapshot]", err);
@@ -327,24 +325,17 @@ exports.takeSnapshot = async (req, res) => {
   }
 };
  
-/**
- * GET /api/portfolio/history
- * Returns portfolio value history for the performance chart.
- *
- * Query: range (1m | 3m | 6m | 1y)  default: 1y
- */
 exports.getPortfolioHistory = async (req, res) => {
   try {
-    const userId = req.user.id;
-    const range  = req.query.range || "1y";
- 
+    const userId   = req.user.id;
+    const range    = req.query.range || "1y";
     const rangeMap = { "1m": 1, "3m": 3, "6m": 6, "1y": 12 };
     const months   = rangeMap[range] || 12;
  
     const from = new Date();
     from.setMonth(from.getMonth() - months);
  
-    const snapshots = await PortfolioSnapshot.find({ userId, takenAt: { $gte: from } })
+    const snapshots = await PortfolioSnapshotSchema.find({ userId, takenAt: { $gte: from } })
       .sort({ takenAt: 1 })
       .lean();
  
@@ -354,3 +345,4 @@ exports.getPortfolioHistory = async (req, res) => {
     return res.status(500).json({ error: "Could not fetch portfolio history." });
   }
 };
+ 
