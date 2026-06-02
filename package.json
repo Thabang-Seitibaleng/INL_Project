@@ -4,12 +4,12 @@
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "devStart": "nodemon server.js"
+    "devStart": "nodemon server.js",
+    "start": "node server.js"
   },
   "keywords": [],
   "author": "",
   "license": "ISC",
-  "description": "",
   "dependencies": {
     "@anthropic-ai/sdk": "^0.98.0",
     "axios": "^1.15.0",
@@ -28,5 +28,14 @@
   },
   "devDependencies": {
     "nodemon": "^3.1.14"
-  }
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/Drew-Lux/INL_Project.git"
+  },
+  "bugs": {
+    "url": "https://github.com/Drew-Lux/INL_Project/issues"
+  },
+  "homepage": "https://github.com/Drew-Lux/INL_Project#readme",
+  "description": ""
 }
